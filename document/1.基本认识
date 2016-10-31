@@ -1,0 +1,40 @@
+1.从“java概念图描述”图中可以认识到jdk的lang和util包中最基础，最重要。
+  java.lang:存放一切这个是系统的基础类，比如String等都是这里面的，这个package是唯一一个可以不用import就可以使用的Package。
+  java.util: 这个是系统辅助类，特别是集合类Collection,List,Map等。
+      (jdk中最基础，最重要2个包：系统的基础类，系统辅助类)
+           ^
+           |
+  ---------|-----------
+  java.io: 这里面是所有输入输出有关的类，比如文件操作等
+  java.net: 这里面是与网络有关的类，比如URL,URLConnection等。
+  java.sql: 这个是数据库操作的类，Connection, Statememt，ResultSet等
+2.Java默认提供的三个ClassLoader
+	BootStrap ClassLoader：称为启动类加载器，是Java类加载层次中最顶层的类加载器，负责加载JDK中的核心类库，如：rt.jar、resources.jar、charsets.jar等，可通过如下程序获得该类加载器从哪些地方加载了相关的jar或class文件：
+	Extension ClassLoader：称为扩展类加载器，负责加载Java的扩展类库，默认加载JAVA_HOME/jre/lib/ext/目下的所有jar。
+	Application  ClassLoader：称为系统类加载器，负责加载应用程序classpath目录下的所有jar和class文件。
+         注意： 除了Java默认提供的三个ClassLoader之外，用户还可以根据需要定义自已的ClassLoader，而这些自定义的
+   ClassLoader都必须继承自java.lang.ClassLoader类，也包括Java提供的另外二个ClassLoader
+       （Extension ClassLoader和Application ClassLoader）在内，但是Bootstrap ClassLoader不继承自ClassLoader，
+         因为它不是一个普通的Java类，底层由C++编写，已嵌入到了JVM内核当中，当JVM启动后，Bootstrap ClassLoader也随着启动，
+         负责加载完核心类库后，并构造Extension ClassLoader和Application ClassLoader类加载器。
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         
+         

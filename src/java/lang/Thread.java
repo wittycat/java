@@ -28,14 +28,15 @@ package java.lang;
 import java.lang.ref.Reference;
 import java.lang.ref.ReferenceQueue;
 import java.lang.ref.WeakReference;
-import java.security.AccessController;
 import java.security.AccessControlContext;
+import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.util.Map;
 import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 import java.util.concurrent.ConcurrentMap;
 import java.util.concurrent.locks.LockSupport;
+
 import sun.nio.ch.Interruptible;
 import sun.reflect.CallerSensitive;
 import sun.reflect.Reflection;
@@ -264,20 +265,9 @@ class Thread implements Runnable {
     public static native Thread currentThread();
 
     /**
-     * A hint to the scheduler that the current thread is willing to yield
-     * its current use of a processor. The scheduler is free to ignore this
-     * hint.
-     *
-     * <p> Yield is a heuristic attempt to improve relative progression
-     * between threads that would otherwise over-utilise a CPU. Its use
-     * should be combined with detailed profiling and benchmarking to
-     * ensure that it actually has the desired effect.
-     *
-     * <p> It is rarely appropriate to use this method. It may be useful
-     * for debugging or testing purposes, where it may help to reproduce
-     * bugs due to race conditions. It may also be useful when designing
-     * concurrency control constructs such as the ones in the
-     * {@link java.util.concurrent.locks} package.
+     * 返回当前线程组和它的子组中活动线程的数目的估计。递归遍历当前线程的线程组中的所有子群。
+     * 返回的值只是一个估计值，因为线程的数量可以动态变化，而这一方法遍历的内部数据结构，
+     * 可能与某些系统线程的存在影响。
      */
     public static native void yield();
 

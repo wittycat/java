@@ -25,10 +25,10 @@
 
 package java.util;
 
-import java.util.function.Consumer;
+import java.io.IOException;
 import java.util.function.BiConsumer;
 import java.util.function.BiFunction;
-import java.io.IOException;
+import java.util.function.Consumer;
 
 /**
  * <p>Hash table and linked list implementation of the <tt>Map</tt> interface,
@@ -160,9 +160,7 @@ import java.io.IOException;
  * @see     Hashtable
  * @since   1.4
  */
-public class LinkedHashMap<K,V>
-    extends HashMap<K,V>
-    implements Map<K,V>
+public class LinkedHashMap<K,V> extends HashMap<K,V>  implements Map<K,V>
 {
 
     /*
@@ -188,6 +186,7 @@ public class LinkedHashMap<K,V>
 
     /**
      * HashMap.Node subclass for normal LinkedHashMap entries.
+     * 扩展HashMap.Node 接口的实现
      */
     static class Entry<K,V> extends HashMap.Node<K,V> {
         Entry<K,V> before, after;

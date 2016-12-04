@@ -300,6 +300,7 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
      * Otherwise, because we are using power-of-two expansion, the
      * elements from each bin must either stay at same index, or move
      * with a power of two offset in the new table.
+     * 
      * HashMap扩容：这也是再使用过程中，若能预见大小，尽量初始化，避免扩容，
      * 扩容从oldTable把数据重新组装到new集合很消耗资源
      */
@@ -315,6 +316,7 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
             }
             else if ((newCap = oldCap << 1) < MAXIMUM_CAPACITY &&
                      oldCap >= DEFAULT_INITIAL_CAPACITY)
+            	//2倍的方式去扩容
                 newThr = oldThr << 1; // double threshold
         }
         else if (oldThr > 0) // initial capacity was placed in threshold
@@ -331,6 +333,10 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
         threshold = newThr;
         @SuppressWarnings({"rawtypes","unchecked"})
             Node<K,V>[] newTab = (Node<K,V>[])new Node[newCap];
+        /**
+         * 这个操作容易导致元素丢失  
+         * 原因就是 线程2进入扩容方法后 读到了线程1刚复制给全局变量的新的空table表，导致线程的添加的元素就丢失了
+         */
         table = newTab;
         if (oldTab != null) {
             for (int j = 0; j < oldCap; ++j) {
@@ -341,31 +347,65 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
                         newTab[e.hash & (newCap - 1)] = e;
                     else if (e instanceof TreeNode)
                         ((TreeNode<K,V>)e).split(this, newTab, j, oldCap);
-                    else { // preserve order
+                    else { // preserve order 保持顺序不变
+                    	/**
+                    	 * 注意：
+                    	 * JDK1.7 倒置链表顺序
+                    	 * 新加入的元素始终在头节点，过程大致是
+                    	 * 获取当前索引位置值设置到新加入的元素e的next指向
+                    	 * 然后把e在赋值给索引位置，这样就导致扩容后容易形成闭合回路（主要是多个线程来回操作导致顺序变化，
+                    	 * 线程1在读取尾元素e时它next指向为空，当线程1使用时线程2可能已经把线程1所使用的e的next指向了线程2的第二个元素，此时
+                    	 * 的元素e在线程2中已经是头节点，而在线程1中还是临时变量（相当于指针）的尾节点，），
+                    	 * get(key)时就悲剧了，cpu使用率居高
+                    	 * 
+                    	 * JDK1.8 不倒置链表顺序
+                    	 * 至少我测试很多次没有形成闭合回路，原因就是扩容前后顺序不变导致指向也不会改变，
+                    	 * 应该（99%的认为，1%留作在进一步验证）不会形成闭合回路
+                    	 */
+                    	//低位链表 ：存储位置在原有table的索引对应的新table表上
                         Node<K,V> loHead = null, loTail = null;
+                        //高位链表 ：存储位置在原有table的（索引+原table数组长度）对应的新table表上
                         Node<K,V> hiHead = null, hiTail = null;
                         Node<K,V> next;
+                        /**
+                         * 高低位链表操作逻辑一模一样
+                         */
                         do {
                             next = e.next;
+                            //判断是位于低位链表上  验证举例:table数组为2 在1索引位上已经有3,5,7，的值 扩容验证
                             if ((e.hash & oldCap) == 0) {
+                            	//第一次进入：设置头指针为第一个元素 
                                 if (loTail == null)
                                     loHead = e;
+                               //第二次和以后进入
                                 else
+                                	//把新加入的元素设置到尾节点
                                     loTail.next = e;
+                                /**
+                                 * 把尾指针设置为当前元素
+                                 * 当是第一个元素时，头尾指针指的都是当前仅有的一个元素
+                                 * 当第二次和第二次之后，头指针指的还是第一个元素 （始终头指针指第一个元素）; 尾指针往后移动一位 ，即指到当前元素e
+                                 * 所以最后赋值时只要把头指针赋给table索引即可（因为尾指针重头指针的位置不断往后移动到了末尾节点）
+                                 */
                                 loTail = e;
                             }
+                            //高位链表
                             else {
+                            	//第一次进入
                                 if (hiTail == null)
                                     hiHead = e;
+                                //第二次以后进入
                                 else
                                     hiTail.next = e;
                                 hiTail = e;
                             }
                         } while ((e = next) != null);
+                        //低位链表
                         if (loTail != null) {
                             loTail.next = null;
                             newTab[j] = loHead;
                         }
+                        //高位链表
                         if (hiTail != null) {
                             hiTail.next = null;
                             newTab[j + oldCap] = hiHead;
@@ -378,9 +418,7 @@ public class HashMap<K,V> extends AbstractMap<K,V> implements Map<K,V>, Cloneabl
     }
 
     /**
-     * Replaces all linked nodes in bin at index for given hash unless
-     * table is too small, in which case resizes instead.
-     * 当数组某位大于等于8时，转化为树
+     * 当链表长度大于等于8时，转化为树
      */
     final void treeifyBin(Node<K,V>[] tab, int hash) {
         int n, index; Node<K,V> e;

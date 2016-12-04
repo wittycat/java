@@ -108,9 +108,7 @@ import java.util.function.Consumer;
  * @since 1.2
  */
 
-public class TreeMap<K,V>
-    extends AbstractMap<K,V>
-    implements NavigableMap<K,V>, Cloneable, java.io.Serializable
+public class TreeMap<K,V> extends AbstractMap<K,V> implements NavigableMap<K,V>, Cloneable, java.io.Serializable
 {
     /**
      * The comparator used to maintain order in this tree map, or
@@ -119,17 +117,10 @@ public class TreeMap<K,V>
      * @serial
      */
     private final Comparator<? super K> comparator;
-
     private transient Entry<K,V> root;
-
-    /**
-     * The number of entries in the tree
-     */
+    //大小
     private transient int size = 0;
-
-    /**
-     * The number of structural modifications to the tree.
-     */
+    //修改次数
     private transient int modCount = 0;
 
     /**
@@ -205,12 +196,6 @@ public class TreeMap<K,V>
 
 
     // Query Operations
-
-    /**
-     * Returns the number of key-value mappings in this map.
-     *
-     * @return the number of key-value mappings in this map
-     */
     public int size() {
         return size;
     }

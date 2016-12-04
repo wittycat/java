@@ -25,11 +25,11 @@
 
 package java.util;
 
-import java.io.*;
-import java.util.concurrent.ThreadLocalRandom;
+import java.io.IOException;
+import java.io.StreamCorruptedException;
 import java.util.function.BiConsumer;
-import java.util.function.Function;
 import java.util.function.BiFunction;
+import java.util.function.Function;
 
 /**
  * This class implements a hash table, which maps keys to values. Any
@@ -224,50 +224,15 @@ public class Hashtable<K,V>
         this(Math.max(2*t.size(), 11), 0.75f);
         putAll(t);
     }
-
-    /**
-     * Returns the number of keys in this hashtable.
-     *
-     * @return  the number of keys in this hashtable.
-     */
     public synchronized int size() {
         return count;
     }
-
-    /**
-     * Tests if this hashtable maps no keys to values.
-     *
-     * @return  <code>true</code> if this hashtable maps no keys to values;
-     *          <code>false</code> otherwise.
-     */
     public synchronized boolean isEmpty() {
         return count == 0;
     }
-
-    /**
-     * Returns an enumeration of the keys in this hashtable.
-     *
-     * @return  an enumeration of the keys in this hashtable.
-     * @see     Enumeration
-     * @see     #elements()
-     * @see     #keySet()
-     * @see     Map
-     */
     public synchronized Enumeration<K> keys() {
         return this.<K>getEnumeration(KEYS);
     }
-
-    /**
-     * Returns an enumeration of the values in this hashtable.
-     * Use the Enumeration methods on the returned object to fetch the elements
-     * sequentially.
-     *
-     * @return  an enumeration of the values in this hashtable.
-     * @see     java.util.Enumeration
-     * @see     #keys()
-     * @see     #values()
-     * @see     Map
-     */
     public synchronized Enumeration<V> elements() {
         return this.<V>getEnumeration(VALUES);
     }

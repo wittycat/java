@@ -69,6 +69,36 @@ public class THashMap {
 		map.remove(myobj);
 		System.out.println(map.size());;
 	}
+	/**
+	 * 参考：http://www.w2bc.com/article/155537
+	 * 情况一：通过断点调节测试多次：只出现了丢失元素的情况;
+	 * 原因是线程1把原table1表指向了新建的table2表，还没有来得及添加
+	 * 线程2在扩容时使用了table2，没有可以挪动的元素导致线程2丢失了执行扩容方法之前添加的元素
+	 * 
+	 * 情况二：没有出现扩容形成的闭合回路，应该不会出现
+	 * 
+	 */
+	@Test
+	public  void dropDeadHalt() {
+		final HashMap<Integer,String> map = new HashMap<Integer,String>(2,0.75f);
+		map.put(5, "C");
+		System.out.println(map);
+		new Thread("Thread1"){
+			@Override
+			public void run() {
+				map.put(3, "A");
+				System.out.println(map);
+			}
+		}.start();
+		new Thread("Thread2"){
+			@Override
+			public void run() {
+				map.put(7, "B");
+				System.out.println(map);
+			}
+		}.start();
+	}
+	
 	class MyObject implements Comparable<MyObject>{
 		@Override
 		public int hashCode() {

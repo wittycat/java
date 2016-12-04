@@ -27,7 +27,8 @@
 | :------------ |:---------------:| -----:|
 |1.7  | 倒置(易形成闭合回路) | 没验证|
 |1.8  | 不倒置(99%的认为不会形成，1%再验证) |会丢失|
-|解决办法| 不当共享变量使用（在局部变量中 new创建 是没问题的，在栈中操作，属于私有的）或使用Collections.synchronizedMap(Map<K, V>)包装或使用ConcurrentHashMap |
+|解决办法| 不当共享变量使用（在局部变量中 new创建 是没问题的，在栈中操作，属于私有的）或使用Collections.synchronizedMap(Map<K, V>)包装或使用ConcurrentHashMap ||
+
 #####1.1.1.2HashTable
 #####1.1.1.3TreeMap
 #####1.1.1.4LinkedHashMap

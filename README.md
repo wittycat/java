@@ -32,6 +32,10 @@
 |解决办法| 不当共享变量使用（在局部变量中 new创建 是没问题的，在栈中操作，属于私有的）或使用Collections.synchronizedMap(Map<K, V>)包装或使用ConcurrentHashMap ||
 
 #####1.1.1.2HashTable
+- 数据结构：数组+单向链表
+- 扩容时元素顺序不变
+- Entry实体基本结构：hash,key,value,next与HsahMap的Node实体结构一致;Map.Entry<K, V> 实现类。
+- 由于HashTable是同步的，多数方法添加了synchronized关键字同步
 #####1.1.1.3TreeMap
 #####1.1.1.4LinkedHashMap
 ##1.2java.lang

@@ -368,13 +368,16 @@ public class Hashtable<K,V>
         modCount++;
         threshold = (int)Math.min(newCapacity * loadFactor, MAX_ARRAY_SIZE + 1);
         table = newMap;
-
+        /**
+         * 数据结构：数组+单向链表
+         */
+        //从数组的最大位开始移动数据
         for (int i = oldCapacity ; i-- > 0 ;) {
             for (Entry<K,V> old = (Entry<K,V>)oldMap[i] ; old != null ; ) {
                 Entry<K,V> e = old;
                 old = old.next;
-
                 int index = (e.hash & 0x7FFFFFFF) % newCapacity;
+                //保持原有链表的元素顺序不变（前提是能映射到同一个index）
                 e.next = (Entry<K,V>)newMap[index];
                 newMap[index] = e;
             }
@@ -430,6 +433,7 @@ public class Hashtable<K,V>
         int index = (hash & 0x7FFFFFFF) % tab.length;
         @SuppressWarnings("unchecked")
         Entry<K,V> entry = (Entry<K,V>)tab[index];
+        //如果hash值和key相等 覆盖旧值
         for(; entry != null ; entry = entry.next) {
             if ((entry.hash == hash) && entry.key.equals(key)) {
                 V old = entry.value;
@@ -437,7 +441,7 @@ public class Hashtable<K,V>
                 return old;
             }
         }
-
+        //不覆盖 则新添加
         addEntry(hash, key, value, index);
         return null;
     }
@@ -794,6 +798,8 @@ public class Hashtable<K,V>
      *
      * @see Map#hashCode()
      * @since 1.2
+     * 
+     * 所有Entry的hashcode累加
      */
     public synchronized int hashCode() {
         /*

@@ -728,8 +728,7 @@ public class LinkedHashMap<K,V> extends HashMap<K,V>  implements Map<K,V>
         }
     }
 
-    final class LinkedKeyIterator extends LinkedHashIterator
-        implements Iterator<K> {
+    final class LinkedKeyIterator extends LinkedHashIterator implements Iterator<K> {
         public final K next() { return nextNode().getKey(); }
     }
 

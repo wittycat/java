@@ -32,12 +32,24 @@
 |解决办法| 不当共享变量使用（在局部变量中 new创建 是没问题的，在栈中操作，属于私有的）或使用Collections.synchronizedMap(Map<K, V>)包装或使用ConcurrentHashMap ||
 
 #####1.1.1.2HashTable
-- 数据结构：数组+单向链表
-- 扩容时元素顺序不变
+- 数据结构：数组+单向链表。
 - Entry实体基本结构：hash,key,value,next与HsahMap的Node实体结构一致;Map.Entry<K, V> 实现类。
-- 由于HashTable是同步的，多数方法添加了synchronized关键字同步
+- 扩容时元素顺序不变。
+- 由于HashTable是同步的，多数方法添加了synchronized关键字同步。
 #####1.1.1.3TreeMap
+- 数据结构：红黑树（天然排序）。
+- Entry结构：key，value， left，right，parent，color
+- 由于这是排序的hash表，必须在构造函数传递比较器Comparator实现类或添加的实体实现Comparable接口（Comparator和Comparable区别是比较器更灵活，可以更具业务给实体实现不同维度的比较器）。
+- 实现结果基本和HashMap的红黑树实现部分一致
 #####1.1.1.4LinkedHashMap
+- 数据结构：双向链表（**输入的顺序和添加顺序一致**）
+- Entry结构，继承自HashMap.Node ,新添加before, after属性
+- 新添加的元素放置到链表的尾部，遍历时从头节点开始，保证了输入的顺序和添加顺序一致
+###         
+    几种map总结：
+        1、在存储上基本与value没有关系，主要依赖K和K的hash值来放置到合适位置。
+        2、内部实现上基本以循环操作为主。
+
 ##1.2java.lang
 ##1.3java.io
 #2.深刻理解（高级要求）

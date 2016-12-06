@@ -83,17 +83,17 @@
 - 数据结构：数组
 - 扩容依赖Arrays.copyOf()，它又依赖于 System.arraycopy（）
 - 通过索引访问遍历效率最高，而使用迭代器的效率最低（还可以通过增强for循环遍历）
-- 
+
 #####1.1.2.2LinkedList
 - 数据结构：双向链表
 - Node实体：item,next, prev(当前，下一个，上一个)
 - LinkedList可以作为FIFO(先进先出)的队列
 - LinkedList可以作为LIFO(后进先出)的栈
-- 
+
 #####1.1.2.3Vector
 - 数据结构：数组
 - 支持同步
-- 
+
 #####1.1.2.3Stack
 - 数据结构：数组
 - 继承自Vector，支持同步，先进后出

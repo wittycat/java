@@ -1,7 +1,20 @@
 ###java源码等级要求，(基于java version 1.8.0_60)
 #1.精读源码（基本要求）
 ##1.1java.util
+
        这个包主要以集合为主，这是数据结构的最佳实践。
+
+#####集合罗列
+
+|集合|  查询时间复杂度  |继承前列 |线程安全|支持排序|
+| :------------ |:--|:---|:--|:--|
+|Map |HashMap|LinkedHashMap |HashTable |TreeMap|
+|Set |HashSet|LinkedHashSet ||TreeSet|
+|~ |无| 无|**线程安全**|**继承前列线程安全**|
+|List |ArrayList| LinkedList|Vector|Stack|
+
+#####遍历Iterator和Enumeration
+     Iterator:迭代器 ,Enumeration：枚举类;Iterator支持fail-fast[ConcurrentModificationException]机制，也能数据进行删除操作,而Enumeration不支持.
 ###1.1.1Map相关
 - 这是集合中个人认为是最关键最复杂的类，搞清楚map的常用实现类是非常关键的对于认识集合总体的实现。
 - 每个key，value键值对封装为Map.Entry<K, V> 实体bean。
@@ -45,12 +58,42 @@
 #####1.1.1.4LinkedHashMap
 - 数据结构：双向链表（**输入的顺序和添加顺序一致**）
 - Entry结构，继承自HashMap.Node ,新添加before, after属性
+- 继承自HashMap
 - 新添加的元素放置到链表的尾部，遍历时从头节点开始，保证了输入的顺序和添加顺序一致
 
 ###         
     几种map总结：
         1、在存储上基本与value没有关系，主要依赖K和K的hash值来放置到合适位置。
         2、内部实现上基本以循环操作为主。
+
+###1.1.2Set相关
+#####1.1.2.1HashSet
+- 实现依赖于HashMap
+
+#####1.1.2.3LinkedHashSet
+- 实现依赖于LinkedHashMap（通过构造函数调用HashSet的LinkedHashMap构造函数实现）
+
+#####1.1.2.2TreeSet
+- 支持排序，间接实现SortedSet接口
+- 实现依赖于NavigableMap
+
+###1.1.3List相关
+
+#####1.1.2.1ArrayList
+- 数据结构：数组
+- 扩容依赖Arrays.copyOf()，它又依赖于 System.arraycopy（）
+- 通过索引访问遍历效率最高，而使用迭代器的效率最低（还可以通过增强for循环遍历）
+#####1.1.2.2LinkedList
+- 数据结构：双向链表
+- Node实体：item,next, prev(当前，下一个，上一个)
+- LinkedList可以作为FIFO(先进先出)的队列
+-  LinkedList可以作为LIFO(后进先出)的栈
+#####1.1.2.3Vector
+- 数据结构：数组
+- 支持同步
+#####1.1.2.3Stack
+- 数据结构：数组
+- 继承自Vector，支持同步，先进后出
 
 ##1.2java.lang
 ##1.3java.io

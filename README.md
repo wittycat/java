@@ -13,8 +13,17 @@
 |~ |无| 无|**线程安全**|**继承前列线程安全**|
 |List |ArrayList| LinkedList|Vector|Stack|
 
-#####遍历Iterator和Enumeration
-     Iterator:迭代器 ,Enumeration：枚举类;Iterator支持fail-fast[ConcurrentModificationException]机制，也能数据进行删除操作,而Enumeration不支持.
+#####相似比较
+
+|Name|  同作用  |不同作用|
+| :------------ |:--|:--|
+|Iterator|支持遍历 |支持fail-fast[ConcurrentModificationException]机制，通过迭代器可以对集合删除;可以对集合进行增强for循环遍历【**Iterable和Iterator一起使用，Iterable像管理者，Iterator负责执行**】|
+|Enumeration| 支持遍历| |
+|Map|支持key-value | 功能强（官方建议使用map）|
+|Dictionary| 支持key-value|和map比较功能弱 |
+|Comparable|支持比较 | 实体直接实现|
+|Comparator| 支持比较|更灵活，实体可以实现多个|
+
 ###1.1.1Map相关
 - 这是集合中个人认为是最关键最复杂的类，搞清楚map的常用实现类是非常关键的对于认识集合总体的实现。
 - 每个key，value键值对封装为Map.Entry<K, V> 实体bean。
@@ -97,6 +106,10 @@
 #####1.1.2.3Stack
 - 数据结构：数组
 - 继承自Vector，支持同步，先进后出
+
+###1.1.4工具类
+- Arrays：提供一系列静态方法，对数组排序，搜索等
+- Collections ：提供一系列静态方法，对集合 排序，搜索，包装集合为安全类型等。包装基本实现思路为，传入之后赋值给局部变量，通过synchronized关键字同步对于传入集合的原有方法加以限制。
 
 ##1.2java.lang
 ##1.3java.io

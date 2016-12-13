@@ -117,7 +117,19 @@
 - 装饰模式和适配器模式
 - 字符流和字节流
 - 流的基本介质和区别
-- ![](/document/io字节输入流.png "io图")
+
+#####io字节输入流（不是所有的输入输出都一一对应）
+
+ ![](/document/io_byte_inputStream.png "io字节输入流")
+
+#####io字节输出流
+
+ ![](/document/io_byte_outputStream.png "io字节输出流")
+
+
+#####io字符输入流
+
+ ![](/document/io_reader.png "io字节输出流")
 
 ##1.3java.lang
 

@@ -117,7 +117,7 @@
 - 装饰模式和适配器模式
 - 字符流和字节流
 - 流的基本介质和区别
-- ![](/document/io.png "io图")
+- ![](/document/io字节输入流.png "io图")
 
 ##1.3java.lang
 

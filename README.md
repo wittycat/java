@@ -129,9 +129,18 @@
 
 #####io字符输入流
 
- ![](/document/io_reader.png "io字节输出流")
+ ![](/document/io_reader.png "io字符输出流")
+
+#####io字符输出流
+
+ ![](/document/io_writer.png "io字符输出流")
 
 ##1.3java.lang
+
+##1.4java.util除过集合的其他类
+
+- Formatter 格式化 %[argument_index$][flags][width][.precision]conversion
+
 
 #2.深刻理解（高级要求）
 ####java.lang.reflect

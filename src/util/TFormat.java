@@ -1,4 +1,4 @@
-package lang;
+package util;
 
 import java.util.Date;
 

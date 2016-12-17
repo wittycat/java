@@ -136,10 +136,14 @@
  ![](/document/io_writer.png "io字符输出流")
 
 ##1.3java.lang
+    java的base包，唯一一个只使用不用导包的包。主要类的类型有：基本类型的包装类型，异常类，进程类，Thread的相关类，字符（串）的系列类。
+- Object：主要提供hashcode，equals ，以及线程之间通信的方式：等待和唤醒。
+- System ：主要是native和集成一些其他类像IO流，RunTime的方法等。
+- RunTime：exit，gc，exec，获取os运行核数。
 
 ##1.4java.util除过集合的其他类
 
-- Formatter 格式化 %[argument_index$][flags][width][.precision]conversion
+- Formatter：公式 %[argument_index$][flags][width][.precision]conversion
 
 
 #2.深刻理解（高级要求）

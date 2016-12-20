@@ -107,9 +107,8 @@ final class WeakCache<K, P, V> {
         // lazily install the 2nd level valuesMap for the particular cacheKey
         ConcurrentMap<Object, Supplier<V>> valuesMap = map.get(cacheKey);
         if (valuesMap == null) {
-            ConcurrentMap<Object, Supplier<V>> oldValuesMap
-                = map.putIfAbsent(cacheKey,
-                                  valuesMap = new ConcurrentHashMap<>());
+            ConcurrentMap<Object, Supplier<V>> oldValuesMap 
+            = map.putIfAbsent(cacheKey,valuesMap = new ConcurrentHashMap<>());
             if (oldValuesMap != null) {
                 valuesMap = oldValuesMap;
             }
@@ -122,6 +121,7 @@ final class WeakCache<K, P, V> {
         Factory factory = null;
 
         while (true) {
+        	//有直接返回
             if (supplier != null) {
                 // supplier might be a Factory or a CacheValue<V> instance
                 V value = supplier.get();
@@ -137,7 +137,7 @@ final class WeakCache<K, P, V> {
             if (factory == null) {
                 factory = new Factory(key, parameter, subKey, valuesMap);
             }
-
+            //缓存 
             if (supplier == null) {
                 supplier = valuesMap.putIfAbsent(subKey, factory);
                 if (supplier == null) {

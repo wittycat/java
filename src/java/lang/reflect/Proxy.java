@@ -34,6 +34,7 @@ import java.util.Map;
 import java.util.Objects;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.function.BiFunction;
+
 import sun.misc.ProxyGenerator;
 import sun.misc.VM;
 import sun.reflect.CallerSensitive;
@@ -240,13 +241,13 @@ public class Proxy implements java.io.Serializable {
         proxyClassCache = new WeakCache<>(new KeyFactory(), new ProxyClassFactory());
 
     /**
-     * the invocation handler for this proxy instance.
+     * 只能子类调用
      * @serial
      */
     protected InvocationHandler h;
 
     /**
-     * Prohibits instantiation.
+     *不能实例
      */
     private Proxy() {
     }
@@ -260,6 +261,7 @@ public class Proxy implements java.io.Serializable {
      *
      * @throws NullPointerException if the given invocation handler, {@code h},
      *         is {@code null}.
+     * 子类使用 ：即代理对象 在构造函数中调用
      */
     protected Proxy(InvocationHandler h) {
         Objects.requireNonNull(h);
@@ -403,12 +405,10 @@ public class Proxy implements java.io.Serializable {
         }
     }
 
-    /**
-     * Generate a proxy class.  Must call the checkProxyAccess method
-     * to perform permission checks before calling this.
-     */
+    //生成代理类的字节码
     private static Class<?> getProxyClass0(ClassLoader loader,
                                            Class<?>... interfaces) {
+    	//代理对象接口数小于65535
         if (interfaces.length > 65535) {
             throw new IllegalArgumentException("interface limit exceeded");
         }
@@ -416,6 +416,7 @@ public class Proxy implements java.io.Serializable {
         // If the proxy class defined by the given loader implementing
         // the given interfaces exists, this will simply return the cached copy;
         // otherwise, it will create the proxy class via the ProxyClassFactory
+        //从缓存中得到，没有则创建
         return proxyClassCache.get(loader, interfaces);
     }
 
@@ -635,10 +636,13 @@ public class Proxy implements java.io.Serializable {
 
             /*
              * Generate the specified proxy class.
+             * 动态生成代理对象的字节数组
+             * 可以利用这个自己把字节数组写.class文件中 查看生成的代理类
              */
             byte[] proxyClassFile = ProxyGenerator.generateProxyClass(
                 proxyName, interfaces, accessFlags);
             try {
+            	//转化字节数组为代理对象的Class 类  native 方法
                 return defineClass0(loader, proxyName,
                                     proxyClassFile, 0, proxyClassFile.length);
             } catch (ClassFormatError e) {
@@ -716,6 +720,7 @@ public class Proxy implements java.io.Serializable {
         /*
          * Look up or generate the designated proxy class.
          */
+        //获取对象字节码对象   并缓存
         Class<?> cl = getProxyClass0(loader, intfs);
 
         /*
@@ -728,6 +733,7 @@ public class Proxy implements java.io.Serializable {
 
             final Constructor<?> cons = cl.getConstructor(constructorParams);
             final InvocationHandler ih = h;
+            //判断class 是否是public 类型
             if (!Modifier.isPublic(cl.getModifiers())) {
                 AccessController.doPrivileged(new PrivilegedAction<Void>() {
                     public Void run() {
@@ -736,6 +742,7 @@ public class Proxy implements java.io.Serializable {
                     }
                 });
             }
+            //公共类型创建实例返回
             return cons.newInstance(new Object[]{h});
         } catch (IllegalAccessException|InstantiationException e) {
             throw new InternalError(e.toString(), e);
@@ -806,9 +813,7 @@ public class Proxy implements java.io.Serializable {
      *          handler's class.
      */
     @CallerSensitive
-    public static InvocationHandler getInvocationHandler(Object proxy)
-        throws IllegalArgumentException
-    {
+    public static InvocationHandler getInvocationHandler(Object proxy) throws IllegalArgumentException{
         /*
          * Verify that the object is actually a proxy instance.
          */
@@ -830,7 +835,7 @@ public class Proxy implements java.io.Serializable {
 
         return ih;
     }
-
+    //生成代理类的字节码
     private static native Class<?> defineClass0(ClassLoader loader, String name,
                                                 byte[] b, int off, int len);
 }

@@ -137,9 +137,10 @@
 
 ##1.3java.lang
     java的base包，唯一一个只使用不用导包的包。主要类的类型有：基本类型的包装类型，异常类，进程类，Thread的相关类，字符（串）的系列类。
-- Object：主要提供hashcode，equals ，以及线程之间通信的方式：等待和唤醒。
+- Object：主要提供hashcode，equals ，getClass，以及线程之间通信的方式：等待和唤醒。
 - System ：主要是native和集成一些其他类像IO流，RunTime的方法等。
 - RunTime：exit，gc，exec，获取os运行核数。
+- Class：对象字节码对象，反射的重点
 
 ##1.4java.util除过集合的其他类
 
@@ -148,6 +149,25 @@
 
 #2.深刻理解（高级要求）
 ####java.lang.reflect
+
+#####反射
+
+![](/document/reflect_class.png "反射类的主要关系")
+
+- getClass()；对象.Class；Class.forName() 获取对象字节码对象
+- Class 对象可以获取字段数组，方法数组，构造函数（通过方法可以创建实例），所涉及的权限修饰符，参数，参数类型，方法的返回值类等一切基本都可以获取到。
+
+#####动态代理
+
+![](/document/jdk_Proxy.png "动态代理执行逻辑")
+
+- 代理模式的应用
+- 创建过程类似于“高级装饰者模式”+“高级继承（非继承实现类，继承的是接口）”
+- 生成代理类过程：生成代理对象的字节码数组->生成字节码对象->通过构造函数创建实例
+- 代理对象和被代理对象的区别：代理对象由于是Proxy的子类，所以持有起桥梁作用的InvocationHandler子类（简称h），h又持有被代理对，通过代理对象给h传入Method对象和参数在加上h持有的被代理对象就可以对代理对象通过Method的invoke执行。其实就是代理对象持有自己实现的InvocationHandler对象，而被代理对象是没有的。（**Method的invoke传入的对象一定不能是h的invoke方法传入的proxy对象，proxy对象是代理对象传入的自己本身，如果传入Proxy，将会发生代理对象和h对象之间的递归调用，直到栈溢出，正确应该传入h持有的被代理对象。h的invoke方法传入的proxy对象也没有什么实际作用**）
+- 代理对象里面的基本方法有equals，toString，hashCode和接口的方法。所有方法里面没有额外的逻辑，都是通过h.invoke(this, method, 参数)去调用真是对象的。通过 ProxyGenerator.generateProxyClass("$Proxy11", 接口字节码数组);  可以写入生成代理对象到文件进行查看。
+- h对象里面的invoke是对被代理对象的所有方法的代理，想要定制化代理可以在里面通过传入的Method对象获取方法名进行判断处理。
+
 ####java.net
 ####javax.net.*
 ####java.nio.*

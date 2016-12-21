@@ -61,18 +61,22 @@ public class TIterableStudent {
 			this.age = age;
 		}
 
+		@SuppressWarnings("unused")
 		public String getName() {
 			return name;
 		}
 
+		@SuppressWarnings("unused")
 		public void setName(String name) {
 			this.name = name;
 		}
 
+		@SuppressWarnings("unused")
 		public Integer getAge() {
 			return age;
 		}
 
+		@SuppressWarnings("unused")
 		public void setAge(Integer age) {
 			this.age = age;
 		}

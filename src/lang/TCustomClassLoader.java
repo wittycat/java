@@ -11,6 +11,7 @@ import java.io.InputStream;
  * descript:
  */
 public class TCustomClassLoader  {
+	@SuppressWarnings("unused")
 	public static void main(String[] args) throws Exception {
 		ClassLoader classLoader = new ClassLoader() {
 			@Override

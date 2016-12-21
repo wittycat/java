@@ -31,6 +31,7 @@ public class TCreateHaoManyString1 {
 //	}
 
 	public static void main(String[] args) {
-		   String info = "a"+ "b"+ "c";
+		   @SuppressWarnings("unused")
+		String info = "a"+ "b"+ "c";
 	}
 }

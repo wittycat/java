@@ -21,6 +21,7 @@ public class TState {
 	 * NullPointerException - 如果 enumType 或 name 为空
 	 * 所以使用valueOf可以用try...catch 或参数加以校验
 	 */
+	@SuppressWarnings("static-access")
 	@Test
     public void enumInnerMethod(){
 		//枚举名称.values() 获取的是枚举实例的集合 和在增强for循环里面的最后的位置是集合一个意思

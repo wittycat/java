@@ -37,7 +37,8 @@ public class TWrite {
 	public void read01() throws IOException {
 	    FileReader fileReader = new FileReader("d:/io2/test.txt");
 	    char[] b = new char[10];
-	    int l;
+	    @SuppressWarnings("unused")
+		int l;
 	    do {
 	    	System.out.println(String.valueOf(b));
 			b = new char[10];

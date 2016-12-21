@@ -14,7 +14,8 @@ public class RBTree<T extends Comparable<T>> {
 	    private static final boolean RED   = false;
 	    private static final boolean BLACK = true;
 
-	    public class RBTNode<T extends Comparable<T>> {
+	    @SuppressWarnings("hiding")
+		public class RBTNode<T extends Comparable<T>> {
 	        boolean color;        // 颜色
 	        T key;                // 关键字(键值)
 	        RBTNode<T> left;    // 左孩子

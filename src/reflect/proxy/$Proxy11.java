@@ -15,6 +15,7 @@ import reflect.IDemoBean;
  * @Reference:
  * @Descript:
  */
+@SuppressWarnings("serial")
 public class $Proxy11 extends Proxy implements IDemoBean, Serializable {
 	private static Method m1;
 	private static Method m3;

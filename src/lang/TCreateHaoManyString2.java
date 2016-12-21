@@ -6,6 +6,7 @@ package lang;
  * 说明：一共创建2个字符串， info为编译后优化的StringBuilder的toString来的，不属于直接创建字符串
  */
 public class TCreateHaoManyString2 {
+	@SuppressWarnings("unused")
 	public static void main(String[] args) {
 		  String a = "a";
 		  String b = "b";

@@ -1,4 +1,4 @@
-package concurrent;
+package concurrent.lock;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -9,15 +9,28 @@ import java.util.concurrent.locks.Lock;
 
 /** 
  *
- * @author chenxun
+ * @Author chenxun
  * @date 2016年12月22日 下午3:54:32 
- *
+ * @Theme:
+ * 			自定义同步共享锁
+ * @Reference:
+ * @Descript:
  */
-public class TAbstractQueuedSynchronizer implements Lock {
+public class TCustomSyncShareLock implements Lock {
 	
+	private Sync sync;
+	/**
+	 * 
+	 * @param limit 当前共享锁最大支持几个线程访问
+	 */
+	public TCustomSyncShareLock(int limit) {
+		if(limit<1)
+			throw new IllegalArgumentException(" limit must over zero");
+		this.sync =  new Sync(limit);
+	}
 	
 	@SuppressWarnings("serial")
-	private  class Sync extends AbstractQueuedSynchronizer{
+	private  final class  Sync extends AbstractQueuedSynchronizer{
 		public Sync(int limit){
 			super.setState(limit);
 		};
@@ -45,16 +58,14 @@ public class TAbstractQueuedSynchronizer implements Lock {
 		}
 	}
 	
-	private Sync sync = new Sync(2);
-	
 	@Override
 	public void lock() {
-		sync.acquireShared(1);//acquire()
+		sync.acquireShared(1);
 	}
 	
 	@Override
 	public void unlock() {
-		sync.releaseShared(1);//release()
+		sync.releaseShared(1);
 	}
 	
 	@Override
@@ -78,7 +89,7 @@ public class TAbstractQueuedSynchronizer implements Lock {
 	}
    
 	public static void main(String[] args) throws InterruptedException {
-		final TAbstractQueuedSynchronizer lock = new TAbstractQueuedSynchronizer();
+		final TCustomSyncShareLock lock = new TCustomSyncShareLock(3);
 		ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(11);
 		for (int i = 0; i < 10; i++) {
 			Runnable runnable = new Runnable() {

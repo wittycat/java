@@ -22,4 +22,8 @@ public class ComporeTime {
 	public static String getMinus(Long start) {
 		return "用时：" + (ComporeTime.end() - start)+"毫秒";
 	}
+	
+	public static void getOutMinus(Long start) {
+		System.out.println("用时：" + (ComporeTime.end() - start)+"毫秒");
+	}
 }

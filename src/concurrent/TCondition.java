@@ -13,6 +13,9 @@ import java.util.concurrent.locks.ReentrantLock;
  * 为每个对象提供多个等待。
  */
 public class TCondition {
+	
+  static volatile int  semaphore;
+  
   public static void main(String[] args) {
 	ReentrantLock reentrantLock = new ReentrantLock();
 	Condition newCondition1 = reentrantLock.newCondition();
@@ -22,6 +25,7 @@ public class TCondition {
 		public void run() {
 			try {
 				reentrantLock.lock();
+				semaphore ++;
 				System.out.println(Thread.currentThread().getName()+"-ing");
 				newCondition1.await();
 				newCondition2.signal();
@@ -37,6 +41,13 @@ public class TCondition {
 		@Override
 		public void run() {
 			try {
+				/**
+				 * 1.保证线程0先获取lock
+				 * 2.如果线程1先获取锁，则2个线程就会处于阻塞状态
+				 */
+				while(semaphore!=1)
+					Thread.yield();
+				
 				reentrantLock.lock();
 				System.out.println(Thread.currentThread().getName()+"-ing");
 				newCondition1.signal();

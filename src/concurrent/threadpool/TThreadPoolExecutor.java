@@ -1,4 +1,4 @@
-package concurrent;
+package concurrent.threadpool;
 
 import java.util.concurrent.BlockingQueue;
 import java.util.concurrent.Executors;

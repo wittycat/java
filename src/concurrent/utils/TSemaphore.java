@@ -1,4 +1,4 @@
-package concurrent;
+package concurrent.utils;
 
 import java.util.Random;
 import java.util.concurrent.ExecutorService;

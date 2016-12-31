@@ -1,4 +1,4 @@
-package concurrent;
+package concurrent.lock;
 
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
@@ -9,8 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * Theme:
  * reference:
  * descript:
- * Condition:限制
- * 为每个对象提供多个等待。
+ * Condition:为每个lock提供多个监听对象
  */
 public class TCondition {
 	

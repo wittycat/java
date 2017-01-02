@@ -4,7 +4,8 @@ package concurrent.lock.comporeblock;
  * @2016年12月27日 上午12:05:35 
  * @Theme:
  * @Reference:http://www.cnblogs.com/skywang12345/p/3505784.html
- * @Descript:针对锁的锁唯一的监听器去让线程等待或唤醒
+ * @Descript:Condition和synchronized依赖锁
+ * 针对锁的锁唯一的监听器去让线程等待或唤醒
  */
 public class TestWait {
 	public static void main(String[] args) {

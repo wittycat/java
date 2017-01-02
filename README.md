@@ -176,10 +176,35 @@
 	主要类关系
 
 ####2.2.2.1AQS
+    锁是面向用户的，同步器是面向锁的（就是锁的内部实现），AQS支持互斥锁，共享锁的实现。
+	AQS实现一个FIFO等待队列
+	通过对state的原子修改来实现获取锁和释放锁；
+	当state为1时可以实现互斥锁（TCustomSyncExclusiveLock），
+	当互斥锁state为大于1时可以实现共享锁（TCustomSyncShareLock），
+	可以认为state的值即表示并发的线程数。
+	
+#####2.2.2.1.1基本点
+- 关键字：模板方法，互斥锁(排它锁)，共享锁，同步队列，阻塞队列（条件队列），LockSupport，ConditionObject
+- AQS：提供一组模板方法用于具体业务实现互斥锁或者共享锁
+- 同步队列：保存等待获取锁的线程节点
+- 阻塞队列：保存执行了await的线程节点
+- LockSupport：用于阻塞或者唤醒线程，属于工具类，不和锁关联（Condition和synchronized阻止线程必须和锁关联）
+- ConditionObject：AQS的监视器
+
+#####2.2.2.1.2同步队列和阻塞队列的节点互相转化（结合ReentrantLock说明）
+- TReentrantLock3运行示例
+- 基本流程：首先所有节点会被加入同步队列，在执行await后会加入阻塞队列，唤醒时又会被转化回同步队列
+- 2个队列独立存在，都使用Node作为基本节点
+
+#####2.2.2.1.3lock ,unLock,await,signal(signalAll:相当于循环操作signal)的逻辑分析（结合ReentrantLock说明）
+- lock:获取锁不到阻塞该线程，加入同步队列
+- unLock:释放锁唤醒后继节点
+- await:主要干三件事:1.阻塞该线程 2.添加到等待队列3. 唤醒后继线程
+- signal:主要干1件事:加入同步队列
 
 ####2.2.2.1ReentrantLock
-- 主要理解公平锁和非公平锁的在获取锁时的不同之处
-- ReentrantLock,属于互斥锁，重入锁
+- 主要理解公平锁和非公平锁的在获取锁时的不同之处（**二者都使用同步队列，非公平锁再获取时存在插队现象，这样对于队列其他的节点线程就是不公平的**）
+- ReentrantLock,属于互斥锁，重入锁（**释放必须和获取执行次数一样**）
 - ReentrantLock的方法在调用时 如果抛出 IllegalMonitorStateException - 则该方法必须在锁的区域内调用
 - 不管是公平锁或者非公平锁都使用的AQS的同步队列
 

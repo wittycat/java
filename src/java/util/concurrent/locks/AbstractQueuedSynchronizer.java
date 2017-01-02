@@ -746,6 +746,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
                     return interrupted;
                 }
                 if (shouldParkAfterFailedAcquire(p, node) &&
+                		//阻塞该线程
                     parkAndCheckInterrupt())
                     interrupted = true;
             }
@@ -1022,6 +1023,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         if (tryRelease(arg)) {
             Node h = head;
             if (h != null && h.waitStatus != 0)
+            	//释放锁唤醒后继节点
                 unparkSuccessor(h);
             return true;
         }
@@ -1408,10 +1410,13 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
 
     /**
      * Transfers a node from a condition queue onto sync queue.
+     * 从等待队列转化到同步队列
      * Returns true if successful.
      * @param node the node
      * @return true if successfully transferred (else the node was
      * cancelled before signal)
+     * 主要作用是加入到同步队列
+     * 其中的唤醒是对非正常线程的处理
      */
     final boolean transferForSignal(Node node) {
         /*
@@ -1430,6 +1435,8 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         int ws = p.waitStatus;
         if (ws > 0 || !compareAndSetWaitStatus(p, ws, Node.SIGNAL))
             LockSupport.unpark(node.thread);
+        
+        
         return true;
     }
 
@@ -1588,7 +1595,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         // Internal methods
 
         /**
-         * Adds a new waiter to wait queue.
+         * 添加到等待队列
          * @return its new wait node
          */
         private Node addConditionWaiter() {
@@ -1774,14 +1781,18 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
          *      {@link #acquire} with saved state as argument.
          * <li> If interrupted while blocked in step 4, throw InterruptedException.
          * </ol>
+         * 依赖  LockSupport.park 阻塞线程
          */
         public final void await() throws InterruptedException {
             if (Thread.interrupted())
                 throw new InterruptedException();
+            //添加到等待队列
             Node node = addConditionWaiter();
+            //唤醒后继线程
             int savedState = fullyRelease(node);
             int interruptMode = 0;
             while (!isOnSyncQueue(node)) {
+            	//阻塞该线程 
                 LockSupport.park(this);
                 if ((interruptMode = checkInterruptWhileWaiting(node)) != 0)
                     break;

@@ -7,7 +7,8 @@ import java.util.concurrent.locks.LockSupport;
  * @0年月日 上午::
  * @Theme:
  * @Reference:http://www.cnblogs.com/skywang12345/p/3505784.html
- * @Descript:使用LockSupport工具类的方法 直接控制线程阻塞与非阻塞
+ * @Descript:用来创建锁和其他同步类的基本线程阻塞原语
+ * 使用LockSupport工具类的方法 直接控制线程阻塞与非阻塞，不依赖锁
  */
 public class TestLockSupport {
 	private static Thread mainThread;

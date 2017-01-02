@@ -8,7 +8,7 @@ import java.util.concurrent.locks.ReentrantLock;
 /** 
  * @Author:chenxun
  * @2016年12月31日 下午9:38:15 
- * @Theme:主要测试公平锁和非公平锁的性能
+ * @Theme:主要测试公平锁和非公平锁的性能和同步队列中线程的打印
  * @Reference:
  * @Descript
  * <ul>

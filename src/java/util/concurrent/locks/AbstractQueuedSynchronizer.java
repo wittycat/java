@@ -319,6 +319,8 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         static final Node SHARED = new Node();
         //exclusive（单独，排他）：指示节点在独占模式中等待的标记
         static final Node EXCLUSIVE = null;
+        
+        
         //cancelled（被取消）：waitStatus的值表示当前线程被取消
         static final int CANCELLED =  1;
         //signal（信号）：waitStatus的值表示为-1，表示当前节点的后继节点包含的线程需要运行，也就是unpark
@@ -1226,31 +1228,19 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
     }
 
     /**
-     * Queries whether any threads have been waiting to acquire longer
-     * than the current thread.
+     * 查询是否有任何线程一直等待获得比当前线程更长的时间.
      *
-     * <p>An invocation of this method is equivalent to (but may be
-     * more efficient than):
+     * <p>调用此方法相当于 (但是会比它效率高):
      *  <pre> {@code
-     * getFirstQueuedThread() != Thread.currentThread() &&
-     * hasQueuedThreads()}</pre>
+     * getFirstQueuedThread() != Thread.currentThread() && hasQueuedThreads()}
+     *  </pre>
      *
-     * <p>Note that because cancellations due to interrupts and
-     * timeouts may occur at any time, a {@code true} return does not
-     * guarantee that some other thread will acquire before the current
-     * thread.  Likewise, it is possible for another thread to win a
-     * race to enqueue after this method has returned {@code false},
-     * due to the queue being empty.
+     * <p>注意，因为取消由于中断和超时可能发生在任何时间，返回true并不能保证其他线程将获得
+     * 在当前线程。同样，经过此方法返回false为另一个线程来获取竞争是可能的，因为队列是空的。
      *
-     * <p>This method is designed to be used by a fair synchronizer to
-     * avoid <a href="AbstractQueuedSynchronizer#barging">barging</a>.
-     * Such a synchronizer's {@link #tryAcquire} method should return
-     * {@code false}, and its {@link #tryAcquireShared} method should
-     * return a negative value, if this method returns {@code true}
-     * (unless this is a reentrant acquire).  For example, the {@code
-     * tryAcquire} method for a fair, reentrant, exclusive mode
-     * synchronizer might look like this:
-     *
+     * <p>这种方法的设计是由一个公正的同步器用来避免打断。这种同步器的tryacquire方法应该返回false，
+     * 及其tryacquireshared方法应该返回一个负值，如果这个方法返回true（除非这是一个可获得）。
+     * 例如，在tryacquire方法公平、折返，独占模式同步可能看起来像这样：
      *  <pre> {@code
      * protected boolean tryAcquire(int arg) {
      *   if (isHeldExclusively()) {
@@ -1263,9 +1253,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
      *   }
      * }}</pre>
      *
-     * @return {@code true} if there is a queued thread preceding the
-     *         current thread, and {@code false} if the current thread
-     *         is at the head of the queue or the queue is empty
+     * @return 如果当前线程前面有排队的线程返回true，如果当前线程位于队列的头或队列为空，则为false
      * @since 1.7
      */
     public final boolean hasQueuedPredecessors() {
@@ -1275,8 +1263,7 @@ public abstract class AbstractQueuedSynchronizer extends AbstractOwnableSynchron
         Node t = tail; // Read fields in reverse initialization order
         Node h = head;
         Node s;
-        return h != t &&
-            ((s = h.next) == null || s.thread != Thread.currentThread());
+        return h != t &&  ((s = h.next) == null || s.thread != Thread.currentThread());
     }
 
 

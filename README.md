@@ -46,12 +46,12 @@
 
 #####多线程下当共享变量使用时，扩容链表造成的问题
 
-
 |版本|  元素是否倒置  |元素是否丢失 |复杂程度|
 | :------------ |:---------------|:-----|:-----|
 |1.7  | 倒置(易形成闭合回路) | 没验证|代码量约1000行|
 |1.8  | 不倒置(99%的认为不会形成，1%再验证) |会丢失|代码量约2000行|
 |解决办法| 不当共享变量使用（在局部变量中 new创建 是没问题的，在栈中操作，属于私有的）或使用Collections.synchronizedMap(Map<K, V>)包装或使用ConcurrentHashMap |||
+
 #####1.1.1.2HashTable
 - 数据结构：数组+单向链表。
 - Entry实体基本结构：hash,key,value,next与HsahMap的Node实体结构一致;Map.Entry<K, V> 实现类。
@@ -112,6 +112,7 @@
 - Collections ：提供一系列静态方法，对集合 排序，搜索，包装集合为安全类型等。包装基本实现思路为，传入之后赋值给局部变量，通过synchronized关键字同步对于传入集合的原有方法加以限制。
 
 ##1.2java.io
+
     理解类提供的功能,才能更准确的使用。要理解io必须先了解一些基本的概念和区别。
 
 - 装饰模式和适配器模式
@@ -120,20 +121,20 @@
 
 #####io字节输入流（不是所有的输入输出都一一对应）
 
- ![](/document/io_byte_inputStream.png "io字节输入流")
+ ![](/document/io/io_byte_inputStream.png "io字节输入流")
 
 #####io字节输出流
 
- ![](/document/io_byte_outputStream.png "io字节输出流")
+ ![](/document/io/io_byte_outputStream.png "io字节输出流")
 
 
 #####io字符输入流
 
- ![](/document/io_reader.png "io字符输出流")
+ ![](/document/io/io_reader.png "io字符输出流")
 
 #####io字符输出流
 
- ![](/document/io_writer.png "io字符输出流")
+ ![](/document/io/io_writer.png "io字符输出流")
 
 ##1.3java.lang
     java的base包，唯一一个只使用不用导包的包。主要类的类型有：基本类型的包装类型，异常类，进程类，Thread的相关类，字符（串）的系列类。
@@ -143,23 +144,18 @@
 - Class：对象字节码对象，反射的重点
 
 ##1.4java.util除过集合的其他类
-
 - Formatter：公式 %[argument_index$][flags][width][.precision]conversion
 
-
 #2.深刻理解（高级要求）
-####java.lang.reflect
 
-#####反射
-
-![](/document/reflect_class.png "反射类的主要关系")
-
+##2.1java.lang.reflect
+###2.1.1反射
+![](/document/reflect/reflect_class.png "反射类的主要关系")
 - getClass()；对象.Class；Class.forName() 获取对象字节码对象
 - Class 对象可以获取字段数组，方法数组，构造函数（通过方法可以创建实例），所涉及的权限修饰符，参数，参数类型，方法的返回值类等一切基本都可以获取到。
 
-#####动态代理
-
-![](/document/jdk_Proxy.png "动态代理执行逻辑")
+###2.1.2动态代理
+![](/document/reflect/jdk_Proxy.png "动态代理执行逻辑")
 
 - 代理模式的应用
 - 创建过程类似于“高级装饰者模式”+“高级继承（非继承实现类，继承的是接口）”
@@ -168,8 +164,38 @@
 - 代理对象里面的基本方法有equals，toString，hashCode和接口的方法。所有方法里面没有额外的逻辑，都是通过h.invoke(this, method, 参数)去调用真是对象的。通过 ProxyGenerator.generateProxyClass("$Proxy11", 接口字节码数组);  可以写入生成代理对象到文件进行查看。
 - h对象里面的invoke是对被代理对象的所有方法的代理，想要定制化代理可以在里面通过传入的Method对象获取方法名进行判断处理。
 
-####java.net
-####javax.net.*
-####java.nio.*
-####java.util.concurrent.*
+##2.2java.util.concurrent.*
+
+	并发包主要内容：原子类，锁，容器，线程池，框架，工具类
+
+![](/document/juc/JUC_main.png "并发主要内容")
+
+###2.2.1原子类
+
+###2.2.2锁
+	主要类关系
+
+####2.2.2.1AQS
+
+####2.2.2.1ReentrantLock
+- 主要理解公平锁和非公平锁的在获取锁时的不同之处
+- ReentrantLock,属于互斥锁，重入锁
+- ReentrantLock的方法在调用时 如果抛出 IllegalMonitorStateException - 则该方法必须在锁的区域内调用
+- 不管是公平锁或者非公平锁都使用的AQS的同步队列
+
+![](/document/juc/JUC_ReentrantLock.png "ReentrantLock内部关系")
+
+####2.2.2.1ReentrantReadWriteLock
+
+###2.2.3容器
+
+###2.2.4线程池
+
+###2.2.5框架
+
+###2.2.6工具类
+
+##2.3java.net
+##2.4javax.net.*
+##2.5java.nio.*
 #3.其他包会使用即可

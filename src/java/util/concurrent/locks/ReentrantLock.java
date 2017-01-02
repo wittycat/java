@@ -34,8 +34,8 @@
  */
 
 package java.util.concurrent.locks;
-import java.util.concurrent.TimeUnit;
 import java.util.Collection;
+import java.util.concurrent.TimeUnit;
 
 /**
  * A reentrant mutual exclusion {@link Lock} with the same basic
@@ -194,6 +194,7 @@ public class ReentrantLock implements Lock, java.io.Serializable {
 
     /**
      * Sync object for non-fair locks
+     * 实现的为互斥锁
      */
     static final class NonfairSync extends Sync {
         private static final long serialVersionUID = 7316153563782823691L;
@@ -201,6 +202,11 @@ public class ReentrantLock implements Lock, java.io.Serializable {
         /**
          * Performs lock.  Try immediate barge, backing up to normal
          * acquire on failure.
+         * 非公平锁的获取和公平锁的获取区别在于：
+         * 非公平锁：上来后直接获取，不管是否存在同步队列，成功结束；失败查看是否已经获取过，是重入计数器加1，否则加入同步队列
+         * 公平锁：当锁没有被占用且队列为空或队列头节点为自己才获取成功，失败查看是否已经获取过，是重入计数器加1，否则加入同步队列
+         * 
+         * 2这获取后面一样
          */
         final void lock() {
             if (compareAndSetState(0, 1))
@@ -231,13 +237,15 @@ public class ReentrantLock implements Lock, java.io.Serializable {
         protected final boolean tryAcquire(int acquires) {
             final Thread current = Thread.currentThread();
             int c = getState();
+            //锁没有被占用并且同步队列中没有等待的 则获取成功
             if (c == 0) {
-                if (!hasQueuedPredecessors() &&
-                    compareAndSetState(0, acquires)) {
+            	//如果没有同步队列中没有等待的 则获取成功（队列头是自己也获取成功）
+                if (!hasQueuedPredecessors() && compareAndSetState(0, acquires)) {
                     setExclusiveOwnerThread(current);
                     return true;
                 }
             }
+            //如果当前线程已经获取锁  重入计数累加
             else if (current == getExclusiveOwnerThread()) {
                 int nextc = c + acquires;
                 if (nextc < 0)

@@ -1,4 +1,4 @@
-package concurrent.lock;
+package concurrent;
 /** 
  * @author：chenxun
  * 创建时间：2016年10月8日 下午8:58:33 

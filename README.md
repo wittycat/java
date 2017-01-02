@@ -137,9 +137,10 @@
  ![](/document/io/io_writer.png "io字符输出流")
 
 ##1.3java.lang
-    java的base包，唯一一个只使用不用导包的包。主要类的类型有：基本类型的包装类型，异常类，进程类，Thread的相关类，字符（串）的系列类。
+    java的base包，唯一一个只使用不用导包的包。
+	主要类的类型有：基本类型的包装类型，异常类，进程类，Thread的相关类，字符（串）的系列类。
 - Object：主要提供hashcode，equals ，getClass，以及线程之间通信的方式：等待和唤醒。
-- System ：主要是native和集成一些其他类像IO流，RunTime的方法等。
+- System ：主要是native和集成一些其他类像IO流，RunTime的方法；nanoTime（）获取微妙值，主要用于线程阻塞时间的计算。
 - RunTime：exit，gc，exec，获取os运行核数。
 - Class：对象字节码对象，反射的重点
 
@@ -151,6 +152,7 @@
 ##2.1java.lang.reflect
 ###2.1.1反射
 ![](/document/reflect/reflect_class.png "反射类的主要关系")
+
 - getClass()；对象.Class；Class.forName() 获取对象字节码对象
 - Class 对象可以获取字段数组，方法数组，构造函数（通过方法可以创建实例），所涉及的权限修饰符，参数，参数类型，方法的返回值类等一切基本都可以获取到。
 
@@ -193,8 +195,10 @@
 
 #####2.2.2.1.2同步队列和阻塞队列的节点互相转化（结合ReentrantLock说明）
 - TReentrantLock3运行示例
+- 同步队列：双向链表；阻塞队列：单向链表
 - 基本流程：首先所有节点会被加入同步队列，在执行await后会加入阻塞队列，唤醒时又会被转化回同步队列
 - 2个队列独立存在，都使用Node作为基本节点
+- （**注意**）使线程节点进入阻塞队列的不适合AQS实现的共享锁操作，因为newCondition.await()其中会调用tryRelease(long arg),而共享锁不会实现这个
 
 #####2.2.2.1.3lock ,unLock,await,signal(signalAll:相当于循环操作signal)的逻辑分析（结合ReentrantLock说明）
 - lock:获取锁不到阻塞该线程，加入同步队列

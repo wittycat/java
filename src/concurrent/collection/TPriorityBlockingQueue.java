@@ -7,7 +7,7 @@ import java.util.concurrent.PriorityBlockingQueue;
  * @2017年1月9日 上午12:35:05 
  * @Theme:
  * @Reference:
- * @Descript:
+ * @Descript:支持排序的排序的误解阻塞队列
  *  入队相同（值相等）元素不会覆盖，出对从队列头出队
  */
 public class TPriorityBlockingQueue {

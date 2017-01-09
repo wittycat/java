@@ -9,7 +9,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @Theme:自定义阻塞队列实现
  * @Reference:
  * @Descript
- * 自定义阻塞队列需要注意的问题
+ * 自定义阻塞队列需要注意的问题（属于通知模式实现）
  * <ol>
  * <li>putIndex和takeIndex，当到达数组末端时，必须从0开始</li>
  * <li>

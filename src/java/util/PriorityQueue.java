@@ -589,6 +589,7 @@ public class PriorityQueue<E> extends AbstractQueue<E>
         int s = --size;
         modCount++;
         E result = (E) queue[0];
+        //数组最后一个元素
         E x = (E) queue[s];
         queue[s] = null;
         if (s != 0)
@@ -646,16 +647,29 @@ public class PriorityQueue<E> extends AbstractQueue<E>
         else
             siftUpComparable(k, x);
     }
-
+    /**
+     * 添加元素到最小堆后（必须满足父索引的值比当前元素小）
+     * @param k :当前元素E的索引号（即原数组大小，所以传入的是原数组大小）
+     * @param x ：当前元素
+     * parentIndex = （k-1）>>>1;   减1是因为数组索引从0开始
+     * 
+     */
     @SuppressWarnings("unchecked")
     private void siftUpComparable(int k, E x) {
         Comparable<? super E> key = (Comparable<? super E>) x;
+        /**
+         * 
+         */
         while (k > 0) {
+        	//找到当前元素的父索引
             int parent = (k - 1) >>> 1;
             Object e = queue[parent];
+            //当前元素E（即key）如果比父元素大 ，终止 把当前元素key 赋值给当前索引k
             if (key.compareTo((E) e) >= 0)
                 break;
+            //否则把父元素赋值给当前索引k的位置
             queue[k] = e;
+            //把父索引设置为当前的索引，递归向上去比较，直到找到当前元素比父索引大的位置，就是当前元素的最终位置
             k = parent;
         }
         queue[k] = key;
@@ -688,21 +702,37 @@ public class PriorityQueue<E> extends AbstractQueue<E>
         else
             siftDownComparable(k, x);
     }
-
+    /**
+     * 移除堆顶元素后，对数组最后一个元素的调整，最终要保证对顶为最小元素
+     * @param k 最小堆的堆顶 数组索引号为0，
+     * @param x 当前数组最后一个元素
+     */
     @SuppressWarnings("unchecked")
     private void siftDownComparable(int k, E x) {
         Comparable<? super E> key = (Comparable<? super E>)x;
+        /**
+         * size为x:的索引
+         * 总体是自上而下去比较  互换
+         */
+        //数组最后一个元素的父索引
         int half = size >>> 1;        // loop while a non-leaf
         while (k < half) {
+        	//首次为堆顶的孩子索引
             int child = (k << 1) + 1; // assume left child is least
+            //堆顶的孩子
             Object c = queue[child];
+            //首次为堆顶的右孩子
             int right = child + 1;
-            if (right < size &&
-                ((Comparable<? super E>) c).compareTo((E) queue[right]) > 0)
+            //首次为最后一个元素的父索引元素 大于  孩子 
+            if (right < size && ((Comparable<? super E>) c).compareTo((E) queue[right]) > 0)
+            	//设置孩子元素为当前元素
                 c = queue[child = right];
+            //首次为最后一个元素和堆顶的孩子 (逐渐向下移动)   比较 如果小于把E(即x)赋值给父元素终止
             if (key.compareTo((E) c) <= 0)
                 break;
+            //这是当前元素的小元素为父元素
             queue[k] = c;
+            // 新父元素往为当前的孩子元素
             k = child;
         }
         queue[k] = key;

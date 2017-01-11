@@ -35,8 +35,6 @@
 
 package java.util.concurrent;
 
-import java.util.concurrent.locks.Condition;
-import java.util.concurrent.locks.ReentrantLock;
 import java.util.AbstractQueue;
 import java.util.Arrays;
 import java.util.Collection;
@@ -47,6 +45,8 @@ import java.util.PriorityQueue;
 import java.util.Queue;
 import java.util.SortedSet;
 import java.util.Spliterator;
+import java.util.concurrent.locks.Condition;
+import java.util.concurrent.locks.ReentrantLock;
 import java.util.function.Consumer;
 
 /**
@@ -179,6 +179,7 @@ public class PriorityBlockingQueue<E> extends AbstractQueue<E>
      * A plain PriorityQueue used only for serialization,
      * to maintain compatibility with previous versions
      * of this class. Non-null only during serialization/deserialization.
+     * 一个普通的优先级仅用于序列化，保持与这类早期版本兼容。非空只在序列化/反序列化。
      */
     private PriorityQueue<E> q;
 

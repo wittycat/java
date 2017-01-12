@@ -40,10 +40,9 @@ import java.util.Collection;
 import java.util.Iterator;
 import java.util.NoSuchElementException;
 import java.util.Queue;
-import java.util.concurrent.TimeUnit;
-import java.util.concurrent.locks.LockSupport;
 import java.util.Spliterator;
 import java.util.Spliterators;
+import java.util.concurrent.locks.LockSupport;
 import java.util.function.Consumer;
 
 /**
@@ -652,7 +651,7 @@ public class LinkedTransferQueue<E> extends AbstractQueue<E>
 
     /**
      * Tries to append node s as tail.
-     *
+     * 尝试添加节点的尾部
      * @param s the node to append
      * @param haveData true if appending in data mode
      * @return null on failure due to losing race with append in

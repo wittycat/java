@@ -24,6 +24,7 @@ public class TPriorityBlockingQueue {
 //		}
 	}
 	/**
+	 * 最小堆：线程不安全无界队列
 	 * 1.此实现不是同步的。如果多个线程中的任意线程修改了队列，则这些线程不应同时访问 PriorityQueue 实例。
 	 * 相反，请使用线程安全的 PriorityBlockingQueue 类。 
 	 * 2.PriorityQueue存储元素为数组，数组的序列按照最小堆的（根元素最小，孩子始终大于父元素）序列
@@ -51,7 +52,8 @@ public class TPriorityBlockingQueue {
 		}
 	}
     /**
-     * 1.支持排序的排序的无解阻塞队列
+     * 最小堆：线程安全无界阻塞队列
+     * 1.支持排序的无界阻塞队列，它使用与类 PriorityQueue 相同的顺序规则，内部都采用数组
      * 2.入队相同（值相等）元素不会覆盖，出对从队列头出队
      * @throws InterruptedException
      */

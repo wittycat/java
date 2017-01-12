@@ -7,7 +7,8 @@ import java.util.concurrent.LinkedBlockingDeque;
  * @2017年1月9日 下午9:55:40 
  * @Theme:
  * @Reference:
- * 链表实现的有界阻塞双端队列，支持同端存取(FILO)和异端存取（FIFO）。 如果未指定容量，那么容量将等于 Integer.MAX_VALUE
+ * 链表实现的有界阻塞双端队列，支持同端存取(FILO)和异端存取（FIFO）。
+ * 如果未指定容量，那么容量将等于 Integer.MAX_VALUE
  * @Descript:
  */
 public class TLinkedBlockingDeque {

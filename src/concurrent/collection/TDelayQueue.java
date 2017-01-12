@@ -11,8 +11,9 @@ import java.util.concurrent.TimeUnit;
  * @Theme:延时队列测试
  * @Reference:
  * @Descript:
- * 1.内部根据PriorityQueue 存储元素
- * 2.适用场景：定时执行（获取），缓存失效等
+ * 1.DelayQueue一个无界阻塞队列
+ * 2.内部根据PriorityQueue（无界线程不安全队列） 存储元素
+ * 3.适用场景：定时执行（获取），缓存失效等
  * 
  */
 public class TDelayQueue {

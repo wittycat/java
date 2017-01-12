@@ -9,7 +9,15 @@ import java.util.concurrent.ThreadPoolExecutor;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author：chenxun 创建时间：2016年6月2日 下午11:54:17 参考： 说明：
+ * @Author：chenxun 
+ * @创建时间：2016年6月2日 下午11:54:17 
+ * @参考： 
+ * @说明：
+ * 1.ThreadPoolExecutor调节线程的原则是：先调整到最小线程，最小线程用完后，
+ * 他会将优先将任务放入缓存队列(offer(task)),等缓冲队列用完了，才会向最大线程数调节
+ * 2.也就是如果使用无界队列  ，就不可能使用最大线程数；
+ *   无界队列：大小线程数一致
+ *   有界队列：大小线程数可以不一致
  */
 public class TThreadPoolExecutor {
 

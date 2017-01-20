@@ -1,5 +1,5 @@
-###java源码等级要求，(基于java version 1.8.0_60)
-#1.精读源码（基本要求）
+###java源码学习，(基于java version 1.8.0_60)
+#1.基础部分（原理，运用熟练掌握）
 ##1.1java.util
 
        这个包主要以集合为主，这是数据结构的最佳实践。
@@ -152,7 +152,7 @@
 ##1.4java.util除过集合的其他类
 - Formatter：公式 %[argument_index$][flags][width][.precision]conversion
 
-#2.深刻理解（高级要求）
+#2.高级部分（深刻理解）
 
 ##2.1java.lang.reflect
 ###2.1.1反射
@@ -246,11 +246,11 @@
 
 ###2.2.3.1队列
 - ArrayBlockingQueue：数组实现的有节阻塞队列，此队列按 FIFO（先进先出）原则。
-    <br/>自定义CArrayBlockingQueue注意：
+   <br/>自定义CArrayBlockingQueue注意：
 	- putIndex和takeIndex，当到达数组末端时，必须从0开始 。
 	- while和if的选择？
-	 - 必须使用while，因为在signal（）take1线程时，只会从阻塞队列转移到同步队列（不见得会获取锁真正唤醒）， 此时可能已经有其他take2线程获取到了锁，把队列中仅有的元素移除了，此时take2线程执行完后是释放锁，唤醒后 继节点也就是take1线程。此时take1线程应该再次判断，条件不满足继续阻塞。
-	 - 能否通过公平锁或不公平锁避免这个问题？ 不能，因为上面的take2线程可以认为是不公平锁的插队线程。 加入是公平锁呢？上面 take1线程顺利获取到了锁，取走了唯一的元素。而新线程在获取不到锁时，加入同步队列。当线程 take1 线程执行完后释放锁，take2线程被唤醒，也必须再次检测while条件。否则将返回null元素，不符合阻塞队列。 
+     - 必须使用while，因为在signal()take1线程时，只会从阻塞队列转移到同步队列（不见得会获取锁真正唤醒）， 此时可能已经有其他take2线程获取到了锁，把队列中仅有的元素移除了，此时take2线程执行完后是释放锁，唤醒后 继节点也就是take1线程。此时take1线程应该再次判断，条件不满足继续阻塞。
+     - 能否通过公平锁或不公平锁避免这个问题？ 不能，因为上面的take2线程可以认为是不公平锁的插队线程。 加入是公平锁呢？上面 take1线程顺利获取到了锁，取走了唯一的元素。而新线程在获取不到锁时，加入同步队列。当线程 take1 线程执行完后释放锁，take2线程被唤醒，也必须再次检测while条件。否则将返回null元素，不符合阻塞队列。 
 	- signal和signalAll:使用这俩个都可以，只不过只会有一个线程获取锁得到元素，所以使用signal比signalAll更恰当 
 - LinkedBlockingQueue：一个单向链表实现的有界（可指定大小，默认Integer.MAX_VALUE）阻塞队列，此队列按 FIFO（先进先出）原则。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。 
 - PriorityBlockingQueue：一个无界阻塞队列，虽然此队列逻辑上是无界的，但是资源被耗尽时试图执行 add 操作也将失败，导致 OutOfMemoryError。`不支持先进先出原则` 
@@ -260,10 +260,69 @@
 
 
 ###2.2.4线程池
+ 线程池常用类关系
+
+![](/document/juc/JUC_ThreadPool.png "线程池常用类关系")
+###2.2.4.1ExecutorCompletionService
+ * CompletionService实现了生产者提交任务和消费者获取结果的解耦，生产者和消费者都不用关心任务的完成顺序， 由 ExecutorCompletionService来保证，消费者一定是按照任务完成的先后顺序来获取执行结果。
+ * 基本实现：Executor+阻塞队列实现
+ * 一组任务获取结果的场景
+###2.2.4.2FutureTask
+ * 仅在计算完成时才能获取结果；如果计算尚未完成，则阻塞 get 方法。
+ * 单个任务获取结果的场景
+###2.2.4.3两种线程池
+- ThreadPoolExecutor
+ * ThreadPoolExecutor调节线程的原则是：先调整到最小线程，最小线程用完后，它会优先将任务 放入缓存队列(offer(task)),等缓冲队列用完了，才会向最大线程数调节。
+ * 线程池线程参数设置原则
+      * 无界队列：大小线程数建议设置成一致，如果使用无界队列  ，就不可能使用最大线程数
+      * 有界队列：大小线程数可以不一致（当有界队列特别大时，也没有必要把core和max设置的不一样， 因为可能很难达到有界的最值，也就更难达到max的值了）
+ * 继承关系:
+   Executor->ExecutorService->AbstractExecutorService->ThreadPoolExecutor
+ * 理解线程复用？（难点）
+- ScheduledThreadPoolExecutor
+ * ScheduledExecutorService的实现类ScheduledThreadPoolExecutor是继承线程池类ThreadPoolExecutor的，因此它拥有线程池的全部特性。但是同时又是一种特殊的线程池，这个
+  线程池的线程数大小最大Integer最大值，任务队列是基于DelayQueue的无限任务队列。
+  **主要提供定时执行功能，通过延时队列实现**
+ * 继承关系:
+   Executor->ExecutorService->AbstractExecutorService->ThreadPoolExecutor->ScheduledExecutorService
+ * scheduleAtFixedRate【不关注上次线程执行完成】和scheduleWithFixedDelay【关注上次线程执行完成】
+ * 功能效果和**Timer**类似
+###2.2.4.4决绝策略
+* 拒绝策略4个类属于ThreadPoolExecutor的内部类
+* 具体使用区别
+  * AbortPolicy：当提交的不能立即执行且阻塞队列无法容纳时， 抛出异常，后续生产线程不能再正常提交到线程池
+  * CallerRunsPolicy：当提交的不能立即执行且阻塞队列无法容纳时，则立即执行,后续正常提交到线程池
+  * DiscardOldestPolicy：当提交的不能立即执行且阻塞队列无法容纳时，移除调队列中最早的任务,后续正常提交到线程池
+  * DiscardPolicy：当提交的不能立即执行且阻塞队列无法容纳时，丢弃提交的任务,后续正常提交到线程池
 
 ###2.2.5框架
+* Executors
+  * 也可以认为是创建线程池的一个工具类
+  * 提供创建线程池的一些静态方法
+* Fork/Join
+ * Fork/Join实现了“工作窃取算法”，ForkJoinTask需要通过ForkJoinPool来执行，任务分割出的子任务会添加到当前工作线程所维护的双端队列中，进入队列的头部。当一个工作线程的队列里暂时没有任务时，它会随机从其他工作线程的队列的尾部获取一个任务。
+ * Fork/Join框架的设计主要2步任务
+     * 第一步分割任务。首先我们需要有一个fork类来把大任务分割成子任务，有可能子任务还是很大，所以还需要不停的分割，直到分割出的子任务足够小。
+     * 第二步执行任务并合并结果。分割的子任务分别放在双端队列里，然后几个启动线程分别从双端队列里获取任务执行。子任务执行完的结果都统一放在一个队列里，启动一个线程从队列里拿数据，然后合并这些数据。
+ * 应用
+     * 第一步：创建任务job，继承ForkJoinTask的子类:
+ 		<br/>-----RecursiveAction：用于没有返回结果的任务。
+ 		<br/>-----RecursiveTask ：用于有返回结果的任务。
+     * 第二步：提交job到ForkJoinPool(获取结果如果有)
 
 ###2.2.6工具类
+* CountDownLatch : 基于AQS共享锁的实现，当state为0时唤醒等待的一个或一组线程
+* CyclicBarrier : 内部维护一个count 当count为0时，等待的线程开始运行，恢复CyclicBarrier的count为原初始值parties，所以相比CountDownLatch是可以重复使用的
+* Exchanger:线程互换数据
+ * 每个线程既可以充当消费者，也可以充当生产者
+ * 当生产大于消费时，如果一直没有被消费完，线程将处于阻塞状态
+* Semaphore:
+   * 基于AQS共享锁的实现
+   * Semaphore可以应用于流量控制，比如对数据库的连接数控制
+   
+
+
+
 
 ##2.3java.net
 ##2.4javax.net.*

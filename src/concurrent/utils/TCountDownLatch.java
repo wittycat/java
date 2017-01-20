@@ -6,7 +6,7 @@ import java.util.concurrent.CountDownLatch;
  *
  * @author chenxun
  * @date 2017年1月4日 下午5:55:17 
- *
+ * 1、基于AQS共享锁的实现，当state为0时唤醒等待的一个或一组线程
  */
 public class TCountDownLatch {
    public static void main(String[] args) {

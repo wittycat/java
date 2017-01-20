@@ -12,7 +12,9 @@ import collection.ComporeTime;
  * @2016年12月21日 下午11:51:22 
  * @Theme:
  * @Reference:
- * @Descript:Semaphore可以应用于流量控制，比如对数据库的连接数控制
+ * @Descript:
+ * 1.Semaphore可以应用于流量控制，比如对数据库的连接数控制
+ * 2.基于AQS共享锁的实现
  */
 public class TSemaphore {
 	public static void main(String[] args) {

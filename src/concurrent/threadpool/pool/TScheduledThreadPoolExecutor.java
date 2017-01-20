@@ -13,8 +13,9 @@ import java.util.concurrent.TimeUnit;
  * @Descript:
  * 1.ScheduledExecutorService的实现类ScheduledThreadPoolExecutor是继承线程池类
  *   ThreadPoolExecutor的，因此它拥有线程池的全部特性。但是同时又是一种特殊的线程池，这个
- *   线程池的线程数大小不限，任务队列是基于DelayQueue的无限任务队列。
- * 2.
+ *   线程池的线程数大小最大Integer最大值，任务队列是基于DelayQueue的无限任务队列。
+ *   主要提供定时执行
+ * 2.scheduleAtFixedRate【不关注上次线程执行完成】和scheduleWithFixedDelay【关注上次线程执行完成】
  */
 public class TScheduledThreadPoolExecutor {
 	static class TaskItem  implements Runnable{

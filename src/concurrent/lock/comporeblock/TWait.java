@@ -7,7 +7,7 @@ package concurrent.lock.comporeblock;
  * @Descript:Condition和synchronized依赖锁
  * 针对锁的锁唯一的监听器去让线程等待或唤醒
  */
-public class TestWait {
+public class TWait {
 	public static void main(String[] args) {
 		  
 		          ThreadA ta = new ThreadA("ta");

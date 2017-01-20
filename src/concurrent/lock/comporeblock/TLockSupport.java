@@ -10,7 +10,7 @@ import java.util.concurrent.locks.LockSupport;
  * @Descript:用来创建锁和其他同步类的基本线程阻塞原语
  * 使用LockSupport工具类的方法 直接控制线程阻塞与非阻塞，不依赖锁
  */
-public class TestLockSupport {
+public class TLockSupport {
 	private static Thread mainThread;
 
 	public static void main(String[] args) {

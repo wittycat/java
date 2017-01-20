@@ -10,7 +10,7 @@ import java.util.concurrent.locks.ReentrantLock;
  * @Reference:Condition和synchronized依赖锁
  * @Descript:针对锁上的监听器（可以获取多个）去控制线程阻塞和非阻塞 和synchronized 更相近
  */
-public class TestCondition {
+public class TCondition {
 	
 	static final ReentrantLock reentrantLock = new ReentrantLock();
 	

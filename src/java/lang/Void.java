@@ -33,8 +33,7 @@ package java.lang;
  * @author  unascribed
  * @since   JDK1.1
  */
-public final
-class Void {
+public final class Void {
 
     /**
      * The {@code Class} object representing the pseudo-type corresponding to

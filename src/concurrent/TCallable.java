@@ -8,7 +8,10 @@ import java.util.concurrent.Future;
 import java.util.concurrent.TimeUnit;
 
 /**
- * @author：chenxun 创建时间：2016年6月2日 下午11:03:58 参考： 说明：
+ * @Author：chenxun 
+ * @创建时间：2016年6月2日 下午11:03:58 
+ * @参考： 
+ * @说明：
  */
 public class TCallable {
 

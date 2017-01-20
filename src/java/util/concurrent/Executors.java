@@ -34,14 +34,16 @@
  */
 
 package java.util.concurrent;
-import java.util.*;
-import java.util.concurrent.atomic.AtomicInteger;
 import java.security.AccessControlContext;
+import java.security.AccessControlException;
 import java.security.AccessController;
 import java.security.PrivilegedAction;
-import java.security.PrivilegedExceptionAction;
 import java.security.PrivilegedActionException;
-import java.security.AccessControlException;
+import java.security.PrivilegedExceptionAction;
+import java.util.Collection;
+import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
+
 import sun.security.util.SecurityConstants;
 
 /**
@@ -498,6 +500,7 @@ public class Executors {
     // Non-public classes supporting the public methods
 
     /**
+     * 适配器模式
      * A callable that runs given task and returns given result
      */
     static final class RunnableAdapter<T> implements Callable<T> {
@@ -601,17 +604,12 @@ public class Executors {
 
         DefaultThreadFactory() {
             SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() :
-                                  Thread.currentThread().getThreadGroup();
-            namePrefix = "pool-" +
-                          poolNumber.getAndIncrement() +
-                         "-thread-";
+            group = (s != null) ? s.getThreadGroup() : Thread.currentThread().getThreadGroup();
+            namePrefix = "pool-" + poolNumber.getAndIncrement() + "-thread-";
         }
 
         public Thread newThread(Runnable r) {
-            Thread t = new Thread(group, r,
-                                  namePrefix + threadNumber.getAndIncrement(),
-                                  0);
+            Thread t = new Thread(group, r,namePrefix + threadNumber.getAndIncrement(),0);
             if (t.isDaemon())
                 t.setDaemon(false);
             if (t.getPriority() != Thread.NORM_PRIORITY)

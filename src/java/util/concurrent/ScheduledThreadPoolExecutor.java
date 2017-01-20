@@ -35,10 +35,16 @@
 
 package java.util.concurrent;
 import static java.util.concurrent.TimeUnit.NANOSECONDS;
+
+import java.util.AbstractQueue;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Iterator;
+import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.concurrent.atomic.AtomicLong;
 import java.util.concurrent.locks.Condition;
 import java.util.concurrent.locks.ReentrantLock;
-import java.util.*;
 
 /**
  * A {@link ThreadPoolExecutor} that can additionally schedule
@@ -118,9 +124,7 @@ import java.util.*;
  * @since 1.5
  * @author Doug Lea
  */
-public class ScheduledThreadPoolExecutor
-        extends ThreadPoolExecutor
-        implements ScheduledExecutorService {
+public class ScheduledThreadPoolExecutor extends ThreadPoolExecutor implements ScheduledExecutorService {
 
     /*
      * This class specializes ThreadPoolExecutor implementation by
@@ -397,7 +401,7 @@ public class ScheduledThreadPoolExecutor
      * @since 1.6
      */
     protected <V> RunnableScheduledFuture<V> decorateTask(
-        Runnable runnable, RunnableScheduledFuture<V> task) {
+    		Runnable runnable, RunnableScheduledFuture<V> task) {
         return task;
     }
 

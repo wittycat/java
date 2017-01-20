@@ -4,10 +4,10 @@ import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 
 /**
- * @author：chenxun 
- * 创建时间：2016年6月2日 下午11:26:40 
- * 参考： 
- * 说明：
+ * @Author：chenxun 
+ * @创建时间：2016年6月2日 下午11:26:40 
+ * @参考： 
+ * @说明：
  */
 public class TExecutors {
 

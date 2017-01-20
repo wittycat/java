@@ -263,13 +263,16 @@
  线程池常用类关系
 
 ![](/document/juc/JUC_ThreadPool.png "线程池常用类关系")
+
 ###2.2.4.1ExecutorCompletionService
  * CompletionService实现了生产者提交任务和消费者获取结果的解耦，生产者和消费者都不用关心任务的完成顺序， 由 ExecutorCompletionService来保证，消费者一定是按照任务完成的先后顺序来获取执行结果。
  * 基本实现：Executor+阻塞队列实现
  * 一组任务获取结果的场景
+
 ###2.2.4.2FutureTask
  * 仅在计算完成时才能获取结果；如果计算尚未完成，则阻塞 get 方法。
  * 单个任务获取结果的场景
+
 ###2.2.4.3两种线程池
 - ThreadPoolExecutor
  * ThreadPoolExecutor调节线程的原则是：先调整到最小线程，最小线程用完后，它会优先将任务 放入缓存队列(offer(task)),等缓冲队列用完了，才会向最大线程数调节。
@@ -287,6 +290,7 @@
    Executor->ExecutorService->AbstractExecutorService->ThreadPoolExecutor->ScheduledExecutorService
  * scheduleAtFixedRate【不关注上次线程执行完成】和scheduleWithFixedDelay【关注上次线程执行完成】
  * 功能效果和**Timer**类似
+
 ###2.2.4.4决绝策略
 * 拒绝策略4个类属于ThreadPoolExecutor的内部类
 * 具体使用区别

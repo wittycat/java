@@ -145,7 +145,7 @@
   - 集成一些其他类像IO流，
   - 集成RunTime的方法
   - nanoTime（）：获取微妙值，主要用于线程阻塞时间的计算。
-  - arraycopy（）：高效数组的拷贝
+  - arraycopy（）：高效数组的拷贝，(包括Arrays.copyOf) 都是拷贝引用
 - RunTime：exit，gc，exec，获取os运行核数。
 - Class：对象字节码对象，反射的重点
 
@@ -178,12 +178,46 @@
 ![](/document/juc/JUC_main.png "并发主要内容")
 
 ###2.2.1原子类
+* 关于Unsafe的并发性。compareAndSwap*方法是原子的，并且可用来实现高性能的、无锁（free-lock）的数据结构。<br/>
+  可能存在ABA问题、指令重排序等问题
+* 获取Unsafe实例的2种方法：反射获取字段的方法或反射获取构造函数获取
+* 自定义实现Integer的原子操作类：CAtomicInteger
+* 原子类主要提供：3类（int，long，Reference），每类3种（本身，数组，字段）的更新
+外加Boolean（底层转化为int）,具体实现对应于Unsafe类的方法
+ * unsafe.compareAndSwapInt(arg0, arg1, arg2, arg3)
+ * unsafe.compareAndSwapLong(arg0, arg1, arg2, arg3)
+ * unsafe.compareAndSwapObject(arg0, arg1, arg2, arg3)
+  <br/>数组的原子更新是通过索引号 更新的具体数值的
+  <br/>若想要实现其他基本类型，可以通过转化为int 或long类型转化去操作
+* 实现原理大致过程如下：
+ * 有一些状态
+ * 创建它的副本
+ * 修改它
+ * 执行CAS
+ * 如果失败，重复尝试直到成功
+
+    **无锁编程（lock free）**
+
+  常见的lock free编程一般是基于CAS(Compare And Swap)操作：CAS(void *ptr, Any       oldValue, Any newValue);即查看内存地址ptr处的值，如果为oldValue则将其改为    newValue，并返回true，否则返回false。 X86平台上的CAS操作一般是通过CPU的CMPXCHG指令来完成的。CPU在执行此指令时会首先锁住CPU总线，禁止其它核心对内存的访问，然后再查看或修改*ptr的值。简单的说CAS利用了CPU的硬件锁来实现对共享资源的串行使用。
+
+   优点：<br/>
+
+ * a、开销较小：不需要进入内核，不需要切换线程；
+ * b、没有死锁：总线锁最长持续为一次read+write的时间；
+ * c、只有写操作需要使用CAS，读操作与串行代码完全相同，可实现读写不互斥。
+ 
+   缺点：<br/>
+
+ * a、编程非常复杂，两行代码之间可能发生任何事，很多常识性的假设都不成立。
+ * b、CAS模型覆盖的情况非常少，无法用CAS实现原子的复数操作。
 
 ###2.2.2锁
-	主要类关系：
+主要类关系：
+
 ![](/document/juc/JUC_Lock_Main.png "Lock包主要类关系")
 
 ####2.2.2.1AQS
+
 - 锁是面向用户的，同步器是面向锁的（就是锁的内部实现），AQS支持互斥锁，共享锁的实现。
 - AQS实现一个FIFO等待队列。
 - 通过对state的原子修改来实现获取锁和释放锁；
@@ -191,7 +225,8 @@
 - 共享锁：state大于1时可以实现共享锁（TCustomSyncShareLock），此时state的值即表示并发的线程数，此时不便实现重入锁。
 	
 #####2.2.2.1.1关键词理解
-	模板方法，互斥锁(排它锁)，共享锁，同步队列，阻塞队列（条件队列），LockSupport，ConditionObject
+
+    模板方法，互斥锁(排它锁)，共享锁，同步队列，阻塞队列（条件队列），LockSupport，ConditionObject
 - AQS：提供一组模板方法用于具体业务实现互斥锁或者共享锁
 - 同步队列：保存等待获取锁的线程节点
 - 阻塞队列：保存执行了await的线程节点
@@ -215,6 +250,9 @@
 - signal:主要干1件事:加入同步队列
 
 ####2.2.2.2ReentrantLock
+
+![](/document/juc/JUC_ReentrantLock.png "ReentrantLock内部关系")
+
 - 主要理解公平锁和非公平锁的在获取锁时的不同之处（**二者都使用同步队列，非公平锁再获取时存在插队现象，这样对于队列其他的节点线程就是不公平的**）
 - ReentrantLock,属于互斥锁，重入锁（**释放必须和获取执行次数一样**）
 - ReentrantLock的方法在调用时 如果抛出 IllegalMonitorStateException - 则该方法必须在锁的区域内调用
@@ -223,11 +261,11 @@
   - 前提:把不同线程获取锁的一次定义为一次上下文切换
   - 获取同等锁次数情况下，非公平锁相对用时更少，原因是减少了cpu的上下文切换
   - 公平锁执行较多上下文切换次数， 而非公平锁执行上下文切换次数较少（原因是当一个线程获取释放锁后，下一次如果它再需要锁，相对比其他线程获取锁的概率更大，此时就不需要切换就相对省时）
-	
-
-![](/document/juc/JUC_ReentrantLock.png "ReentrantLock内部关系")
 
 ####2.2.2.3ReentrantReadWriteLock
+
+![](/document/juc/JUC_ReentrantReadWriteLock.png "ReentrantReadWriteLock内部关系")
+
 - 出现读写锁的缘由：当多读少写时，使用读写锁比使用互斥锁具有更高的并发性
 - 特点：（**读锁可以并发访问，写锁时其他的读锁和其他的写锁都被阻塞**）
 - 主要依据32位的int类型的state的低16位的值表示写锁（为互斥锁）；高16位的值表示读锁（为共享锁）
@@ -235,29 +273,92 @@
 - 写状态：s & (1 << 16) - 1   即：s&65535，也就是s与16个1（2进制的），这样就把高16位抹去了；当写状态+1时，即为s+1，只给低位加。
 - 读状态：s>>>16   ,表示无符号补0右移16位；当读状态+1时，等于s+（1<<16）,结果就是只给高位加
 - （**锁降级**）流程：先获取写锁，在获取读锁，在释放写锁，在释放读锁（不支持锁升级）
-![](/document/juc/JUC_ReentrantReadWriteLock.png "ReentrantReadWriteLock内部关系")
 
 ###2.2.3容器
-* 结构图
-* 阻塞队列主要方法说明：
+
+  主要并发容器
+![](/document/juc/JUC_Collection.png "并发容器")
+
+###2.2.3.1队列
+
+*  阻塞队列主要方法说明：
   * [add:remove]没有值或队列满时，操作报异常；属于Queue接口的规范
   * [offer:poll]返回特殊值（null或波尔值），队列满时添加失败，造成丢失元素；属于Queue接口的规范
   * [put:take]空或满时操作阻塞，但是不会丢失元素；属于BlockingQueue接口的规范
-
-###2.2.3.1队列
-- ArrayBlockingQueue：数组实现的有节阻塞队列，此队列按 FIFO（先进先出）原则。
+- **ArrayBlockingQueue**：数组实现的有节阻塞队列，此队列按 FIFO（先进先出）原则。
    <br/>自定义CArrayBlockingQueue注意：
 	- putIndex和takeIndex，当到达数组末端时，必须从0开始 。
 	- while和if的选择？
      - 必须使用while，因为在signal()take1线程时，只会从阻塞队列转移到同步队列（不见得会获取锁真正唤醒）， 此时可能已经有其他take2线程获取到了锁，把队列中仅有的元素移除了，此时take2线程执行完后是释放锁，唤醒后 继节点也就是take1线程。此时take1线程应该再次判断，条件不满足继续阻塞。
-     - 能否通过公平锁或不公平锁避免这个问题？ 不能，因为上面的take2线程可以认为是不公平锁的插队线程。 加入是公平锁呢？上面 take1线程顺利获取到了锁，取走了唯一的元素。而新线程在获取不到锁时，加入同步队列。当线程 take1 线程执行完后释放锁，take2线程被唤醒，也必须再次检测while条件。否则将返回null元素，不符合阻塞队列。 
+     - 能否通过公平锁或不公平锁避免这个问题？ 不能，因为上面的take2线程可以认为是不公平锁的插队线程。 加入是公平锁呢？上面 take1线程顺利获取到了锁，取走了唯一的元素。而新线程在获取不到锁时，加入同步队列。当线程 take1 线程执行完后释放锁，take2线程被唤醒，也必须再次检测while条件。否则将返回null元素，不符合阻塞队列。
+ 	 - **区别：while比if执行完后多一次检测**
+ 	 - if：只会进行一次判断，执行if代码块完后就会执行if之后的代码
+ 	 - while：符合while条件后，执行完while代码块里面的代码，执行完后会再次检查while条件，符合继续执行；不符合跳过，while：多使用于多线程唤醒后的再次检查条件
 	- signal和signalAll:使用这俩个都可以，只不过只会有一个线程获取锁得到元素，所以使用signal比signalAll更恰当 
-- LinkedBlockingQueue：一个单向链表实现的有界（可指定大小，默认Integer.MAX_VALUE）阻塞队列，此队列按 FIFO（先进先出）原则。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。 
-- PriorityBlockingQueue：一个无界阻塞队列，虽然此队列逻辑上是无界的，但是资源被耗尽时试图执行 add 操作也将失败，导致 OutOfMemoryError。`不支持先进先出原则` 
+- **LinkedBlockingQueue**：一个单向链表实现的有界（可指定大小，默认Integer.MAX_VALUE）阻塞队列，此队列按 FIFO（先进先出）原则。链接队列的吞吐量通常要高于基于数组的队列，但是在大多数并发应用程序中，其可预知的性能要低。 
+- **PriorityBlockingQueue**：一个无界阻塞队列，虽然此队列逻辑上是无界的，但是资源被耗尽时试图执行 add 操作也将失败，导致 OutOfMemoryError。`不支持先进先出原则` 
  - 由于队列是无界的，所以put方法不会由于满了（始终不会满）而导致阻塞 。
  - 不保证具有同等优先级的元素的顺序
  - 入队（通过比较找到合适位置入队）相同（值相等）元素不会覆盖，出对从队列头出队
+- **DelayQueue**：一个无界阻塞队列，内部根据PriorityQueue（无界线程不安全队列） 存储元素，适用场景：定时执行（获取），缓存失效等
+- LinkedBlockingDeque：链表实现的有界阻塞双端队列，支持同端存取(FILO)和异端存取（FIFO）。如果未指定容量，那么容量将等于 Integer.MAX_VALUE
+- **LinkedTransferQueue**：一个链表实现的无界阻塞队列
+  * tryTransfer()尝试传递给消费者 ,没有消费者放入队列
+  * transfer()尝试传递给消费者 ,没有消费者自己处于阻塞状态，这种模式类似与SynchronousQueue
+  * 无论是transfer还是tryTransfer方法，在>=1个消费者线程等待获取元素时（此时队列为空），都会立刻转交，这属于线程之间的元素交换。注意，这时，元素并没有进入队列。
+  * 在队列中已有数据情况下，transfer将需要等待前面数据被消费掉，直到传递的元素e被消费线程取走为止。
+- **SynchronousQueue**：一个不存储元素的阻塞队列
+  - 其中每个插入操作必须等待另一个线程的对应移除操作，如果没被消费则一直处于阻塞
+  - 此同步队列没有任何内部容量，甚至连一个队列的容量都没有,适合传递性的应用场景 
 
+###2.2.3.2Copy-On-Write简称COW，仅2个类Set和List
+ * Copy-On-Write简称COW，是一种用于程序设计中的优化策略，采用数组存储。
+ * 使用场景：多读少写（读不加锁，写会加锁，防止多个线程多多个拷贝同时造成数据混乱，所以会加锁防止此问题）
+ * 写时采用复制新的容器，进行修改；新容器为原容器中对象的引用，使用完把新容器赋值给类的原有容器引用。复制新的容器时，这是一个比较耗费性能的操作
+ * CopyOnWriteArraySet 采用CopyOnWriteArrayList 作为存储。基本差不多
+ * CopyOnWrite的缺点
+   * 内存占用问题。因为CopyOnWrite的写时复制机制，所以在进行写操作的时候，内存里会同时驻扎两个对象的内存，旧的对象和新写入的对象<br/>
+  （注意:在复制的时候只是复制容器里的引用，只是在写的时候会创建新对象添加到新容器里，而旧容器的对象还在使用，所以有两份对象内存）。
+   * 数据一致性问题。CopyOnWrite容器只能保证数据的最终一致性，不能保证数据的实时一致性。所以如果若希望写入的的数据，马上能读到，不建议使用CopyOnWrite容器。
+* java1.8 下CopyOnWriteArrayList 和 Collections.synchronizedList(new ArrayList<String>()) 性能测试结论：
+  * 1.6下 CopyOnWriteArrayList 优于 synchronizedList网上结论;
+  * 1.8下基本差不多,可能是jvm对synchronized 不断的优化
+
+###2.2.3.3Concurrent*集合
+    均为安全的集合ConcurrentHashMap采用加锁，其他几个采用CAS无锁更新
+* ConcurrentHashMap
+ * 1.代码体积约6000行
+ * 2.java1.8 ConcurrentHashMap 和  HashMap 结构一样 ，在put操作时，当数组索引位置大于1时进行加锁操作
+ * 3.size()(或 mappingCount()) 使用无锁操作，返回并非准确值, 因为此时可能有线程对集合进行删除或增加操作
+ * 4.比较：
+     * java1.7
+         * 1.版本采用Segment<K,V>[] segments数组，Segment继承ReentrantLock，实现锁分段，进行安全操作
+         * 2.每个Segment相当于一个老版本的hashMap(数据结构为：table数组＋单向链表的数据结构)
+         * 3.get时  取不到值最后在加锁取一次
+     * java1.8
+         * 1.取消segments字段，直接采用 HashEntry<K,V>[] table保存数据
+         * 2.数据结构改为：变更为table数组＋单向链表(或红黑树)
+         * 3.get() 使用无锁操作，取不到直接返回空
+ * 5.1.8中的锁力度更小，数据结构更简单
+ * 6.CounterCell何时使用 没有理解透彻？
+* ConcurrentLinkedDeque
+   * 1.代码体积约1500行
+   * 2.一个无界线程安全双向链表
+   * 3.使用unsafe 保证原子性
+* ConcurrentLinkedQueue
+   * 一个无界线程安全FIFO队列
+* ConcurrentSkipListMap
+   * 是TreeMap的多线的安全版本
+   * 数据结构使用跳表保存数据，实质为一种链表
+
+**Key-Value数据结构**<br/>
+   目前常用的key-value数据结构有三种：Hash表、红黑树、SkipList<br/>
+
+|名称|  描述  |
+| :------------ |:---------------:|
+|hash表 |即数组：例如：Hashmap（Hash表+链表+红黑树），HashTbale（Hash表+链表） 插入、查找最快，为O(1)；如使用链表实现则可实现无锁；数据有序化需要显式的排序操作。| 
+|红黑树|例如：TreeMap 插入、查找为O(logn)，但常数项较小；无锁实现的复杂性很高，一般需要加锁；数据天然有序。|
+|Skip表 | 例如：ConcurrentSkipListMap,插入、查找为O(logn)，但常数项比红黑树要大；底层结构为链表，可无锁实现；数据天然有序。|
 
 ###2.2.4线程池
  线程池常用类关系

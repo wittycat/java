@@ -14,6 +14,7 @@ import sun.misc.Unsafe;
  * http://blog.csdn.net/wz408/article/details/41986731
  * @Descript:
  * 1.关于Unsafe的并发性。compareAndSwap方法是原子的，并且可用来实现高性能的、无锁的数据结构。
+ *   可能存在ABA问题、指令重排序等
  * 2.	大致过程如下：
  * 		有一些状态
  * 		创建它的副本

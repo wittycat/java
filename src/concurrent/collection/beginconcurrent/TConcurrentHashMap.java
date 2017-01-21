@@ -15,7 +15,7 @@ import java.util.concurrent.ConcurrentHashMap;
  *   java1.7
  *   1.版本采用Segment<K,V>[] segments数组，Segment继承ReentrantLock，实现锁分段，进行安全操作
  *   2.每个Segment相当于一个老版本的hashMap(数据结构为：table数组＋单向链表的数据结构)
- *   2.get时  取不到值最后在加锁取一次
+ *   3.get时  取不到值最后在加锁取一次
  *   java1.8
  *   1.取消segments字段，直接采用 HashEntry<K,V>[] table保存数据
  *   2.数据结构改为：变更为table数组＋单向链表(或红黑树)

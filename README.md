@@ -194,20 +194,14 @@
  * 创建它的副本
  * 修改它
  * 执行CAS
- * 如果失败，重复尝试直到成功
-
-    **无锁编程（lock free）**
-
+ * 如果失败，重复尝试直到成功<br/>
+    **无锁编程（lock free）**<br/>
   常见的lock free编程一般是基于CAS(Compare And Swap)操作：CAS(void *ptr, Any       oldValue, Any newValue);即查看内存地址ptr处的值，如果为oldValue则将其改为    newValue，并返回true，否则返回false。 X86平台上的CAS操作一般是通过CPU的CMPXCHG指令来完成的。CPU在执行此指令时会首先锁住CPU总线，禁止其它核心对内存的访问，然后再查看或修改*ptr的值。简单的说CAS利用了CPU的硬件锁来实现对共享资源的串行使用。
-
-   优点：<br/>
-
+<br/>优点：<br/>
  * a、开销较小：不需要进入内核，不需要切换线程；
  * b、没有死锁：总线锁最长持续为一次read+write的时间；
  * c、只有写操作需要使用CAS，读操作与串行代码完全相同，可实现读写不互斥。
- 
-   缺点：<br/>
-
+<br/>缺点：<br/>
  * a、编程非常复杂，两行代码之间可能发生任何事，很多常识性的假设都不成立。
  * b、CAS模型覆盖的情况非常少，无法用CAS实现原子的复数操作。
 
@@ -392,7 +386,7 @@
  * scheduleAtFixedRate【不关注上次线程执行完成】和scheduleWithFixedDelay【关注上次线程执行完成】
  * 功能效果和**Timer**类似
 
-###2.2.4.4决绝策略
+###2.2.4.4拒绝策略
 * 拒绝策略4个类属于ThreadPoolExecutor的内部类
 * 具体使用区别
   * AbortPolicy：当提交的不能立即执行且阻塞队列无法容纳时， 抛出异常，后续生产线程不能再正常提交到线程池

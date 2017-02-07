@@ -17,7 +17,7 @@
 
 |Name|  同作用  |不同作用|
 | :------------ |:--|:--|
-|Iterator|支持遍历 |支持fail-fast[ConcurrentModificationException]机制，通过迭代器可以对集合删除;可以对集合进行增强for循环遍历【**Iterable和Iterator一起使用，Iterable像管理者，Iterator负责执行**】|
+|Iterator|支持遍历 |支持fail-fast[ConcurrentModificationException]机制，通过迭代器可以对集合删除;可以对集合进行增强for循环遍历【**Iterable和Iterator一起使用，Iterable像管理者，产生Iterator，Iterator负责执行**】|
 |Enumeration| 支持遍历| |
 |Map|支持key-value | 功能强（官方建议使用map）|
 |Dictionary| 支持key-value|和map比较功能弱 |
@@ -61,7 +61,8 @@
 #####1.1.1.3TreeMap
 - 数据结构：红黑树（天然排序）。
 - Entry结构：key，value， left，right，parent，color
-- 由于这是排序的hash表，必须在构造函数传递比较器Comparator实现类或添加的实体实现Comparable接口（Comparator和Comparable区别是比较器更灵活，可以更具业务给实体实现不同维度的比较器）。
+- 由于这是排序的hash表，必须在构造函数传递比较器Comparator实现类或添加的实体实现Comparable接口
+  - Comparator和Comparable区别：Comparable，方便，实体直接继承，不灵活。Comparator，灵活，根据业务多维度实现比较
 - 实现结果基本和HashMap的红黑树实现部分一致
 
 #####1.1.1.4LinkedHashMap
@@ -158,7 +159,10 @@
 ###2.1.1反射
 ![](/document/reflect/reflect_class.png "反射类的主要关系")
 
-- getClass()；对象.Class；Class.forName() 获取对象字节码对象
+- 获取对象字节对象的3种方式
+  - this.getClass()
+  - 对象.class
+  - Class.forName() 获取对象字节码对象
 - Class 对象可以获取字段数组，方法数组，构造函数（通过方法可以创建实例），所涉及的权限修饰符，参数，参数类型，方法的返回值类等一切基本都可以获取到。
 
 ###2.1.2动态代理

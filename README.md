@@ -1,10 +1,10 @@
-###java源码学习，(基于java version 1.8.0_60)
-#1.基础部分（原理，运用熟练掌握）
-##1.1java.util
+### java源码学习，(基于java version 1.8.0_60)
+# 1.基础部分（原理，运用熟练掌握）
+## 1.1java.util
 
        这个包主要以集合为主，这是数据结构的最佳实践。
 
-#####集合罗列
+##### 集合罗列
 
 |集合|  查询时间复杂度  |继承前列 |线程安全|支持排序|
 | :------------ |:--|:---|:--|:--|
@@ -13,7 +13,7 @@
 |~ |无| 无|**线程安全**|**继承前列线程安全**|
 |List |ArrayList| LinkedList|Vector|Stack|
 
-#####相似比较
+##### 相似比较
 
 |Name|  同作用  |不同作用|
 | :------------ |:--|:--|
@@ -24,11 +24,11 @@
 |Comparable|支持比较 | 实体直接实现|
 |Comparator| 支持比较|更灵活，实体可以实现多个|
 
-###1.1.1Map相关
+### 1.1.1Map相关
 - 这是集合中个人认为是最关键最复杂的类，搞清楚map的常用实现类是非常关键的对于认识集合总体的实现。
 - 每个key，value键值对封装为Map.Entry<K, V> 实体bean。
 
-####1.1.1.1HashMap
+#### 1.1.1.1HashMap
 - 数据结构：Node实体数组（又叫Hash表或散列表，hash函数又叫散列函数）+ 单向链表+红黑树（又叫自平衡二叉查找树）。
 - Node实体基本结构：hash,key,value,next(链表的下一个实体);Map.Entry<K, V> 实现类。
 - TreeNode实体基本结构：parent,left,right,prev;TreeNode继承LinkedHashMap.Entry继承HashMap.Node<K,V>。
@@ -36,7 +36,7 @@
 - 对于hash冲突解决办法使用链表（或红黑树），当链表长度大于等于8时转化为红黑树。之所以转化为红黑树是当数量大时红黑树的查询效率更高。
 - 操作红黑树，增加删除后为了自平衡 进行的左右旋和重新着色。
 
-#####几种时间复杂度
+##### 几种时间复杂度
 
 |结构|  查询时间复杂度  |说明 |
 | :------------ |:---------------:| -----:|
@@ -44,7 +44,7 @@
 |链表 |  O（n）|遍历链表去查找 |
 |红黑树 | O（log n）|  |
 
-#####多线程下当共享变量使用时，扩容链表造成的问题
+##### 多线程下当共享变量使用时，扩容链表造成的问题
 
 |版本|  元素是否倒置  |元素是否丢失 |复杂程度|
 | :------------ |:---------------|:-----|:-----|
@@ -52,20 +52,20 @@
 |1.8  | 不倒置(99%的认为不会形成，1%再验证) |会丢失|代码量约2000行|
 |解决办法| 不当共享变量使用（在局部变量中 new创建 是没问题的，在栈中操作，属于私有的）或使用Collections.synchronizedMap(Map<K, V>)包装或使用ConcurrentHashMap |||
 
-#####1.1.1.2HashTable
+##### 1.1.1.2HashTable
 - 数据结构：数组+单向链表。
 - Entry实体基本结构：hash,key,value,next与HsahMap的Node实体结构一致;Map.Entry<K, V> 实现类。
 - 扩容时元素顺序不变。
 - 由于HashTable是同步的，多数方法添加了synchronized关键字同步。
 
-#####1.1.1.3TreeMap
+##### 1.1.1.3TreeMap
 - 数据结构：红黑树（天然排序）。
 - Entry结构：key，value， left，right，parent，color
 - 由于这是排序的hash表，必须在构造函数传递比较器Comparator实现类或添加的实体实现Comparable接口
   - Comparator和Comparable区别：Comparable，方便，实体直接继承，不灵活。Comparator，灵活，根据业务多维度实现比较
 - 实现结果基本和HashMap的红黑树实现部分一致
 
-#####1.1.1.4LinkedHashMap
+##### 1.1.1.4LinkedHashMap
 - 数据结构：双向链表（**输入的顺序和添加顺序一致**）
 - Entry结构，继承自HashMap.Node ,新添加before, after属性
 - 继承自HashMap
@@ -76,43 +76,43 @@
         1、在存储上基本与value没有关系，主要依赖K和K的hash值来放置到合适位置。
         2、内部实现上基本以循环操作为主。
 
-###1.1.2Set相关
-#####1.1.2.1HashSet
+### 1.1.2Set相关
+##### 1.1.2.1HashSet
 - 实现依赖于HashMap
 
-#####1.1.2.3LinkedHashSet
+##### 1.1.2.3LinkedHashSet
 - 实现依赖于LinkedHashMap（通过构造函数调用HashSet的LinkedHashMap构造函数实现）
 
-#####1.1.2.2TreeSet
+##### 1.1.2.2TreeSet
 - 支持排序，间接实现SortedSet接口
 - 实现依赖于NavigableMap
 
-###1.1.3List相关
+### 1.1.3List相关
 
-#####1.1.2.1ArrayList
+##### 1.1.2.1ArrayList
 - 数据结构：数组
 - 扩容依赖Arrays.copyOf()，它又依赖于 System.arraycopy（）
 - 通过索引访问遍历效率最高，而使用迭代器的效率最低（还可以通过增强for循环遍历）
 
-#####1.1.2.2LinkedList
+##### 1.1.2.2LinkedList
 - 数据结构：双向链表
 - Node实体：item,next, prev(当前，下一个，上一个)
 - LinkedList可以作为FIFO(先进先出)的队列
 - LinkedList可以作为LIFO(后进先出)的栈
 
-#####1.1.2.3Vector
+##### 1.1.2.3Vector
 - 数据结构：数组
 - 支持同步
 
-#####1.1.2.3Stack
+##### 1.1.2.3Stack
 - 数据结构：数组
 - 继承自Vector，支持同步，先进后出
 
-###1.1.4工具类
+### 1.1.4工具类
 - Arrays：提供一系列静态方法，对数组排序，搜索等
 - Collections ：提供一系列静态方法，对集合 排序，搜索，包装集合为安全类型等。包装基本实现思路为，传入之后赋值给局部变量，通过synchronized关键字同步对于传入集合的原有方法加以限制。
 
-##1.2java.io
+## 1.2java.io
 
     理解类提供的功能,才能更准确的使用。要理解io必须先了解一些基本的概念和区别。
 
@@ -120,24 +120,24 @@
 - 字符流和字节流
 - 流的基本介质和区别
 
-#####io字节输入流（不是所有的输入输出都一一对应）
+##### io字节输入流（不是所有的输入输出都一一对应）
 
  ![](/document/io/io_byte_inputStream.png "io字节输入流")
 
-#####io字节输出流
+##### io字节输出流
 
  ![](/document/io/io_byte_outputStream.png "io字节输出流")
 
 
-#####io字符输入流
+##### io字符输入流
 
  ![](/document/io/io_reader.png "io字符输出流")
 
-#####io字符输出流
+##### io字符输出流
 
  ![](/document/io/io_writer.png "io字符输出流")
 
-##1.3java.lang
+## 1.3java.lang
     java的base包，唯一一个只使用不用导包的包。
 	主要类的类型有：基本类型的包装类型，异常类，进程类，Thread的相关类，字符（串）的系列类。
 - Object：主要提供hashcode，equals ，getClass，以及线程之间通信的方式：等待和唤醒。
@@ -150,13 +150,13 @@
 - RunTime：exit，gc，exec，获取os运行核数。
 - Class：对象字节码对象，反射的重点
 
-##1.4java.util除过集合的其他类
+## 1.4java.util除过集合的其他类
 - Formatter：公式 %[argument_index$][flags][width][.precision]conversion
 
-#2.高级部分（深刻理解）
+# 2.高级部分（深刻理解）
 
-##2.1java.lang.reflect
-###2.1.1反射
+## 2.1java.lang.reflect
+### 2.1.1反射
 ![](/document/reflect/reflect_class.png "反射类的主要关系")
 
 - 获取对象字节对象的3种方式
@@ -165,7 +165,7 @@
   - Class.forName() 获取对象字节码对象
 - Class 对象可以获取字段数组，方法数组，构造函数（通过方法可以创建实例），所涉及的权限修饰符，参数，参数类型，方法的返回值类等一切基本都可以获取到。
 
-###2.1.2动态代理
+### 2.1.2动态代理
 ![](/document/reflect/jdk_Proxy.png "动态代理执行逻辑")
 
 - 代理模式的应用
@@ -175,13 +175,13 @@
 - 代理对象里面的基本方法有equals，toString，hashCode和接口的方法。所有方法里面没有额外的逻辑，都是通过h.invoke(this, method, 参数)去调用真是对象的。通过 ProxyGenerator.generateProxyClass("$Proxy11", 接口字节码数组);  可以写入生成代理对象到文件进行查看。
 - h对象里面的invoke是对被代理对象的所有方法的代理，想要定制化代理可以在里面通过传入的Method对象获取方法名进行判断处理。
 
-##2.2java.util.concurrent.*
+## 2.2java.util.concurrent.*
 
 	并发包主要内容：原子类，锁，容器，线程池，框架，工具类
 
 ![](/document/juc/JUC_main.png "并发主要内容")
 
-###2.2.1原子类
+### 2.2.1原子类
 * 关于Unsafe的并发性。compareAndSwap*方法是原子的，并且可用来实现高性能的、无锁（free-lock）的数据结构。<br/>
   可能存在ABA问题、指令重排序等问题
 * 获取Unsafe实例的2种方法：反射获取字段的方法或反射获取构造函数获取
@@ -209,12 +209,12 @@
  * a、编程非常复杂，两行代码之间可能发生任何事，很多常识性的假设都不成立。
  * b、CAS模型覆盖的情况非常少，无法用CAS实现原子的复数操作。
 
-###2.2.2锁
+### 2.2.2锁
 主要类关系：
 
 ![](/document/juc/JUC_Lock_Main.png "Lock包主要类关系")
 
-####2.2.2.1AQS
+#### 2.2.2.1AQS
 
 - 锁是面向用户的，同步器是面向锁的（就是锁的内部实现），AQS支持互斥锁，共享锁的实现。
 - AQS实现一个FIFO等待队列。
@@ -222,7 +222,7 @@
 - 互斥锁：state为1时可以实现互斥锁（TCustomSyncExclusiveLock），大于1可以实现重入锁；
 - 共享锁：state大于1时可以实现共享锁（TCustomSyncShareLock），此时state的值即表示并发的线程数，此时不便实现重入锁。
 	
-#####2.2.2.1.1关键词理解
+##### 2.2.2.1.1关键词理解
 
     模板方法，互斥锁(排它锁)，共享锁，同步队列，阻塞队列（条件队列），LockSupport，ConditionObject
 - AQS：提供一组模板方法用于具体业务实现互斥锁或者共享锁
@@ -233,7 +233,7 @@
 
 （**注意：Object的监视器只有一个同步队列和一个阻塞队列；而AQS却有一个同步队列和多个阻塞队列，对应多个ConditionObject**）
 
-#####2.2.2.1.2同步队列和阻塞队列的节点互相转化（结合ReentrantLock说明）
+##### 2.2.2.1.2同步队列和阻塞队列的节点互相转化（结合ReentrantLock说明）
 - TReentrantLock3运行示例
 - 同步队列：双向链表；阻塞队列：单向链表
 - 基本流程：首先所有节点会被加入同步队列，在执行await后会加入阻塞队列，唤醒时又会被转化回同步队列
@@ -241,13 +241,13 @@
 
 （**注意使线程节点进入阻塞队列的不适合AQS实现的共享锁操作，因为newCondition.await()其中会调用tryRelease(long arg),而共享锁不会实现这个**）
 
-#####2.2.2.1.3lock ,unLock,await,signal(signalAll:相当于循环操作signal)的逻辑分析（结合ReentrantLock说明）
+##### 2.2.2.1.3lock ,unLock,await,signal(signalAll:相当于循环操作signal)的逻辑分析（结合ReentrantLock说明）
 - lock:获取不到锁阻塞该线程，加入同步队列
 - unLock:释放锁唤醒后继节点
 - await:主要干三件事:1.阻塞该线程 2.添加到等待队列3. 唤醒后继线程
 - signal:主要干1件事:加入同步队列
 
-####2.2.2.2ReentrantLock
+#### 2.2.2.2ReentrantLock
 
 ![](/document/juc/JUC_ReentrantLock.png "ReentrantLock内部关系")
 
@@ -260,7 +260,7 @@
   - 获取同等锁次数情况下，非公平锁相对用时更少，原因是减少了cpu的上下文切换
   - 公平锁执行较多上下文切换次数， 而非公平锁执行上下文切换次数较少（原因是当一个线程获取释放锁后，下一次如果它再需要锁，相对比其他线程获取锁的概率更大，此时就不需要切换就相对省时）
 
-####2.2.2.3ReentrantReadWriteLock
+#### 2.2.2.3ReentrantReadWriteLock
 
 ![](/document/juc/JUC_ReentrantReadWriteLock.png "ReentrantReadWriteLock内部关系")
 
@@ -272,12 +272,12 @@
 - 读状态：s>>>16   ,表示无符号补0右移16位；当读状态+1时，等于s+（1<<16）,结果就是只给高位加
 - （**锁降级**）流程：先获取写锁，在获取读锁，在释放写锁，在释放读锁（不支持锁升级）
 
-###2.2.3容器
+### 2.2.3容器
 
   主要并发容器
 ![](/document/juc/JUC_Collection.png "并发容器")
 
-###2.2.3.1队列
+### 2.2.3.1队列
 
 *  阻塞队列主要方法说明：
   * [add:remove]没有值或队列满时，操作报异常；属于Queue接口的规范
@@ -309,7 +309,7 @@
   - 其中每个插入操作必须等待另一个线程的对应移除操作，如果没被消费则一直处于阻塞
   - 此同步队列没有任何内部容量，甚至连一个队列的容量都没有,适合传递性的应用场景 
 
-###2.2.3.2Copy-On-Write简称COW，仅2个类Set和List
+### 2.2.3.2Copy-On-Write简称COW，仅2个类Set和List
  * Copy-On-Write简称COW，是一种用于程序设计中的优化策略，采用数组存储。
  * 使用场景：多读少写（读不加锁，写会加锁，防止多个线程多多个拷贝同时造成数据混乱，所以会加锁防止此问题）
  * 写时采用复制新的容器，进行修改；新容器为原容器中对象的引用，使用完把新容器赋值给类的原有容器引用。复制新的容器时，这是一个比较耗费性能的操作
@@ -322,7 +322,7 @@
   * 1.6下 CopyOnWriteArrayList 优于 synchronizedList网上结论;
   * 1.8下基本差不多,可能是jvm对synchronized 不断的优化
 
-###2.2.3.3Concurrent*集合
+### 2.2.3.3Concurrent*集合
     均为安全的集合ConcurrentHashMap采用加锁，其他几个采用CAS无锁更新
 * ConcurrentHashMap
  * 1.代码体积约6000行
@@ -358,12 +358,12 @@
 |红黑树|例如：TreeMap 插入、查找为O(logn)，但常数项较小；无锁实现的复杂性很高，一般需要加锁；数据天然有序。|
 |Skip表 | 例如：ConcurrentSkipListMap,插入、查找为O(logn)，但常数项比红黑树要大；底层结构为链表，可无锁实现；数据天然有序。|
 
-###2.2.4线程池
+### 2.2.4线程池
  线程池常用类关系
 
 ![](/document/juc/JUC_ThreadPool.png "线程池常用类关系")
 
-###2.2.4.1ExecutorCompletionService
+### 2.2.4.1ExecutorCompletionService
  * CompletionService实现了生产者提交任务和消费者获取结果的解耦，生产者和消费者都不用关心任务的完成顺序， 由 ExecutorCompletionService来保证，消费者一定是按照任务完成的先后顺序来获取执行结果。
  * 基本实现：Executor+阻塞队列实现
  * 一组任务获取结果的场景
@@ -372,7 +372,7 @@
  * 仅在计算完成时才能获取结果；如果计算尚未完成，则阻塞 get 方法。
  * 单个任务获取结果的场景
 
-###2.2.4.3两种线程池
+### 2.2.4.3两种线程池
 - ThreadPoolExecutor
  * ThreadPoolExecutor调节线程的原则是：先调整到最小线程，最小线程用完后，它会优先将任务 放入缓存队列(offer(task)),等缓冲队列用完了，才会向最大线程数调节。
  * 线程池线程参数设置原则
@@ -390,7 +390,7 @@
  * scheduleAtFixedRate【不关注上次线程执行完成】和scheduleWithFixedDelay【关注上次线程执行完成】
  * 功能效果和**Timer**类似
 
-###2.2.4.4拒绝策略
+### 2.2.4.4拒绝策略
 * 拒绝策略4个类属于ThreadPoolExecutor的内部类
 * 具体使用区别
   * AbortPolicy：当提交的不能立即执行且阻塞队列无法容纳时， 抛出异常，后续生产线程不能再正常提交到线程池
@@ -398,7 +398,7 @@
   * DiscardOldestPolicy：当提交的不能立即执行且阻塞队列无法容纳时，移除调队列中最早的任务,后续正常提交到线程池
   * DiscardPolicy：当提交的不能立即执行且阻塞队列无法容纳时，丢弃提交的任务,后续正常提交到线程池
 
-###2.2.5框架
+### 2.2.5框架
 * Executors
   * 也可以认为是创建线程池的一个工具类
   * 提供创建线程池的一些静态方法
@@ -413,7 +413,7 @@
  		<br/>-----RecursiveTask ：用于有返回结果的任务。
      * 第二步：提交job到ForkJoinPool(获取结果如果有)
 
-###2.2.6工具类
+### 2.2.6工具类
 * CountDownLatch : 基于AQS共享锁的实现，当state为0时唤醒等待的一个或一组线程
 * CyclicBarrier : 内部维护一个count 当count为0时，等待的线程开始运行，恢复CyclicBarrier的count为原初始值parties，所以相比CountDownLatch是可以重复使用的
 * Exchanger:线程互换数据
@@ -423,10 +423,10 @@
    * 基于AQS共享锁的实现
    * Semaphore可以应用于流量控制，比如对数据库的连接数控制
    
-###2.2.7常见问题（整理自并发编程网）
+### 2.2.7常见问题（整理自并发编程网）
 <a href="./document/juc/并发.md">并发常见问题</a>
 
-##2.3java.net
-##2.4javax.net.*
-##2.5java.nio.*
-#3.其他包会使用即可
+## 2.3java.net
+## 2.4javax.net.*
+## 2.5java.nio.*
+# 3.其他包会使用即可

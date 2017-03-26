@@ -43,5 +43,4 @@ class TestClass{
 	public TestClass() {
 		System.out.println("构造函数  执行..");
 	}
-	
 }

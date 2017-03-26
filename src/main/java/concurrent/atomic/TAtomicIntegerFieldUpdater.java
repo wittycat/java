@@ -20,7 +20,7 @@ public class TAtomicIntegerFieldUpdater {
 		 * 必须是有volatile 修饰,
 		 * 必须是是int 类型,
 		 */
-		private volatile int a;
+		public volatile int a;
 
 		public IntegerBean(int a) {
 			this.a = a;
@@ -62,13 +62,13 @@ public class TAtomicIntegerFieldUpdater {
 		}
 		
 		//all threads start 
-		while(Thread.activeCount()<1001)
+		while(Thread.activeCount()<1002)
 			Thread.yield();
 		
 		//off
 		countDownLatch.countDown();
 		
-		while(Thread.activeCount()>1)
+		while(Thread.activeCount()>2)
 			Thread.yield();
 		
 		

@@ -16,10 +16,6 @@ import org.junit.Test;
  */
 public class THashMap {
 	
-	public static void main(String[] args) {
-
-	}
-	
 	@Test
     public  void yiwei() {
 		//被移位操作的底数为1，切记不是数学中的2的多少次方，

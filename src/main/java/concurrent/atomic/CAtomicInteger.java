@@ -55,7 +55,7 @@ public class CAtomicInteger {
 		System.out.println("init value="+cAtomicInteger.getValue());
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		
-		for (int i = 0; i < 10000; i++) {
+		for (int i = 0; i < 100; i++) {
 			new Thread(new Runnable() {
 				@Override
 				public void run() {
@@ -69,14 +69,14 @@ public class CAtomicInteger {
 			}).start();
 		}
 		
-		while (Thread.activeCount()!=10001) 
+		while (Thread.activeCount()!=102)
 			Thread.yield();
 		
 		countDownLatch.countDown();
-		while (Thread.activeCount()>1) 
+		while (Thread.activeCount()>2)
 			Thread.yield();
 		
-		System.out.println("期望20000 value="+cAtomicInteger.getValue());
+		System.out.println("期望200 value="+cAtomicInteger.getValue());
 		
 	}
 	

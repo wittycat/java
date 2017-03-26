@@ -16,9 +16,9 @@ public class TTreeMap {
   
   @Test
   public void testDefaultComparator(){
-	  Map<Person,Integer> treeMap = new TreeMap<Person,Integer>();
+	  Map<TTreeMap.Person,Integer> treeMap = new TreeMap<TTreeMap.Person,Integer>();
 	  for (int i = 0; i < 10; i++) {
-		  treeMap.put(new Person(), i);
+		  treeMap.put(new TTreeMap.Person(String.valueOf(i)), i);
 	  }
 //	  System.out.println(treeMap.size());
 //	  Set<Person> keySet = treeMap.keySet();
@@ -31,13 +31,27 @@ public class TTreeMap {
 //		  System.out.println(iterator.next());;
 //	  }
   }
-  class Person{
-	private String name;
-	public void setName(String name) {
-		this.name = name;
-	}
-	public String getName() {
-		return name;
-	}
+  static class Person implements  Comparable<Person>{
+	  public Person(String name) {
+		  this.name = name;
+	  }
+
+	  public Person() {
+	  }
+
+	  private String name;
+
+	  public void setName(String name) {
+		  this.name = name;
+	  }
+
+	  public String getName() {
+		  return name;
+	  }
+
+	  @Override
+	  public int compareTo(Person o) {
+		  return o.getName().compareTo(this.getName());
+	  }
   }
 }

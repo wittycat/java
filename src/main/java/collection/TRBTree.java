@@ -6,7 +6,7 @@ package collection;
  * reference:http://www.cnblogs.com/skywang12345/p/3245399.html
  * descript:
  */
-public class RBTreeTest {
+public class TRBTree {
 //	    private static final int a[] = {10, 40, 30, 60, 90, 70, 20, 50, 80};
 	    private static final int a[] = {20, 40, 50, 60, 68, 70,  80, 120,75};
 	    @SuppressWarnings("unused")

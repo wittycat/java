@@ -35,7 +35,7 @@ public class TJionYield {
 		  }
 	  });
 	  thread.start();
-	  while (Thread.activeCount()>1) 
+	  while (Thread.activeCount()>1)
 		  Thread.yield();
 	  System.out.println("main线程");
    }

@@ -371,7 +371,11 @@
 ###2.2.4.2FutureTask
  * 仅在计算完成时才能获取结果；如果计算尚未完成，则阻塞 get 方法。
  * 单个任务获取结果的场景
-
+ * 可使用 FutureTask 包装 Callable 或 Runnable 对象。因为 FutureTask 实现了 Runnable，所以可将 FutureTask 提交给 Executor 执行。
+ * FutureTask和Callable的关系？
+    *  由于线程池(AbstractExecutorService)只执行Callable类型的任务  ,提交的 Runnable 也会转化为Callable。
+    *  从类型上讲：FutureTask = Runnable+Future ;FutureTask内部又维护一个Callable，所以实际上又是一个 Callable
+    *  总之：FutureTask既是Runnable 又是Callable ，还有Future的特性。
 ### 2.2.4.3两种线程池
 - ThreadPoolExecutor
  * ThreadPoolExecutor调节线程的原则是：先调整到最小线程，最小线程用完后，它会优先将任务 放入缓存队列(offer(task)),等缓冲队列用完了，才会向最大线程数调节。

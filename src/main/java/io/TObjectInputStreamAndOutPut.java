@@ -49,66 +49,66 @@ public class TObjectInputStreamAndOutPut {
 		 outputStream.writeObject(person);
 		 outputStream.close();
 	}
-	
-	
+
+	class Person implements Serializable {
+
+		private static final long serialVersionUID = 1L;
+
+		private String name;
+		private Integer age;
+		private Integer height;
+		private transient String hobby;
+
+		public Person() {
+			super();
+		}
+
+		public Person(String name, Integer age,Integer height , String hobby) {
+			super();
+			this.name = name;
+			this.age = age;
+			this.hobby = hobby;
+			this.height = height;
+		}
+
+
+		public String getName() {
+			return name;
+		}
+
+		public void setName(String name) {
+			this.name = name;
+		}
+
+		public Integer getAge() {
+			return age;
+		}
+
+		public void setAge(Integer age) {
+			this.age = age;
+		}
+
+		public  Integer getHeight() {
+			return height;
+		}
+
+		public  void setHeight(Integer height) {
+			this.height = height;
+		}
+
+		public String getHobby() {
+			return hobby;
+		}
+
+		public void setHobby(String hobby) {
+			this.hobby = hobby;
+		}
+
+		@Override
+		public String toString() {
+			return "Person [name=" + name + ", age=" + age +",height="+height+ ", hobby=" + hobby
+					+ "]";
+		}
+	}
 }
-class Person implements Serializable {
-	
-	private static final long serialVersionUID = 1L;
-	
-	private String name;
-	private Integer age;
-	private static Integer height;
-	private transient String hobby;
 
-	public Person() {
-		super();
-	}
-	
-	public Person(String name, Integer age,Integer height , String hobby) {
-		super();
-		this.name = name;
-		this.age = age;
-		this.hobby = hobby;
-		Person.height = height;
-	}
-
-
-	public String getName() {
-		return name;
-	}
-
-	public void setName(String name) {
-		this.name = name;
-	}
-
-	public Integer getAge() {
-		return age;
-	}
-
-	public void setAge(Integer age) {
-		this.age = age;
-	}
-
-	public static Integer getHeight() {
-		return height;
-	}
-
-	public static void setHeight(Integer height) {
-		Person.height = height;
-	}
-
-	public String getHobby() {
-		return hobby;
-	}
-
-	public void setHobby(String hobby) {
-		this.hobby = hobby;
-	}
-
-	@Override
-	public String toString() {
-		return "Person [name=" + name + ", age=" + age +",height="+height+ ", hobby=" + hobby
-				+ "]";
-	}
-}

@@ -26,24 +26,25 @@ public class TCountDownLatchRunnable {
 			System.out.println("执行完成");
 			newFixedThreadPool.shutdown();
 	   }
-}
-class WorkerRunnable implements Runnable {
-	private final CountDownLatch doneSignal;
-	private final int i;
 
-	WorkerRunnable(CountDownLatch doneSignal, int i) {
-		this.doneSignal = doneSignal;
-		this.i = i;
-	}
+	   static class WorkerRunnable implements Runnable {
+		   private final CountDownLatch doneSignal;
+		   private final int i;
 
-	public void run() {
-		System.out.println("执行中"+i);
-		try {
-			Thread.sleep(2000*i);
-		} catch (InterruptedException e) {
-			e.printStackTrace();
-		}finally{
-			doneSignal.countDown();
-		}
-	}
+		   WorkerRunnable(CountDownLatch doneSignal, int i) {
+			   this.doneSignal = doneSignal;
+			   this.i = i;
+		   }
+
+		   public void run() {
+			   System.out.println("执行中"+i);
+			   try {
+				   Thread.sleep(2000*i);
+			   } catch (InterruptedException e) {
+				   e.printStackTrace();
+			   }finally{
+				   doneSignal.countDown();
+			   }
+		   }
+	   }
 }

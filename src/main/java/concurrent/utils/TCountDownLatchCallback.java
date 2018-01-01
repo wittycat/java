@@ -32,60 +32,60 @@ public class TCountDownLatchCallback {
 		System.out.println("完成：" + reBack2.toString());
 		executor.shutdown();
 	}
-}
+	static  class WorkerRunnable2 implements Callable<ReBack> {
+		private CountDownLatch doneSignal;
+		private int i;
 
-class WorkerRunnable2 implements Callable<ReBack> {
-	private CountDownLatch doneSignal;
-	private int i;
+		WorkerRunnable2(CountDownLatch doneSignal, int i) {
+			this.doneSignal = doneSignal;
+			this.i = i;
+		}
 
-	WorkerRunnable2(CountDownLatch doneSignal, int i) {
-		this.doneSignal = doneSignal;
-		this.i = i;
-	}
-
-	public ReBack call() throws Exception {
-		try {
-			System.out.println("执行中" + i);
+		public ReBack call() throws Exception {
 			try {
-				Thread.sleep(2000 * i);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
+				System.out.println("执行中" + i);
+				try {
+					Thread.sleep(2000 * i);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
+				}
+				ReBack reBack = new ReBack();
+				if (i == 1)
+					reBack.setS1(1 + "");
+				else
+					reBack.setS2(2 + "");
+				return reBack;
+			} finally {
+				doneSignal.countDown();
 			}
-			ReBack reBack = new ReBack();
-			if (i == 1)
-				reBack.setS1(1 + "");
-			else
-				reBack.setS2(2 + "");
-			return reBack;
-		} finally {
-			doneSignal.countDown();
 		}
 	}
+
+	static class ReBack {
+		private String s1;
+		private String s2;
+
+		public String getS1() {
+			return s1;
+		}
+
+		public void setS1(String s1) {
+			this.s1 = s1;
+		}
+
+		public String getS2() {
+			return s2;
+		}
+
+		public void setS2(String s2) {
+			this.s2 = s2;
+		}
+
+		@Override
+		public String toString() {
+			return "reBack [s1=" + s1 + ", s2=" + s2 + "]";
+		}
+
+	}
 }
 
-class ReBack {
-	private String s1;
-	private String s2;
-
-	public String getS1() {
-		return s1;
-	}
-
-	public void setS1(String s1) {
-		this.s1 = s1;
-	}
-
-	public String getS2() {
-		return s2;
-	}
-
-	public void setS2(String s2) {
-		this.s2 = s2;
-	}
-
-	@Override
-	public String toString() {
-		return "reBack [s1=" + s1 + ", s2=" + s2 + "]";
-	}
-
-}

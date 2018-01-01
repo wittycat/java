@@ -41,38 +41,38 @@ public class TCyclicBarrier {
 		threadPool.submit(new TestTask(cyclicBarrier, result,1));
 		threadPool.submit(new TestTask(cyclicBarrier, result,2));
 	}
+	static  class TestTask implements Runnable {
 
-}
+		private CyclicBarrier cy;
+		private Map <String,Number> result;
+		private int  type;
+		private Random random = new Random();
+		public TestTask(CyclicBarrier cb, Map <String,Number> result,int  type) {
+			this.cy = cb;
+			this.result = result;
+			this.type = type;
+		}
 
- class TestTask implements Runnable {
-
-	private CyclicBarrier cy;
-	private Map <String,Number> result;
-	private int  type;
-	private Random random = new Random();
-	public TestTask(CyclicBarrier cb, Map <String,Number> result,int  type) {
-		this.cy = cb;
-		this.result = result;
-		this.type = type;
-	}
-
-	public void run() {
-		try {
-			if(1==type){
-				System.out.println("type="+type);
-				result.put("totalAmount", random.nextInt(100));
-				result.put("countloan", random.nextInt(100));
-			}
-			if(2==type){
-				System.out.println("type="+type);
-				result.put("countplan", random.nextInt(100));
-			}
-		} finally {
+		public void run() {
 			try {
-				cy.await();
-			} catch (InterruptedException | BrokenBarrierException ignore) {
+				if(1==type){
+					System.out.println("type="+type);
+					result.put("totalAmount", random.nextInt(100));
+					result.put("countloan", random.nextInt(100));
+				}
+				if(2==type){
+					System.out.println("type="+type);
+					result.put("countplan", random.nextInt(100));
+				}
+			} finally {
+				try {
+					cy.await();
+				} catch (InterruptedException | BrokenBarrierException ignore) {
+				}
 			}
 		}
-	}
 
+	}
 }
+
+

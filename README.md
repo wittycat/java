@@ -430,6 +430,9 @@
 ### 2.2.7常见问题（整理自并发编程网）
 <a href="./document/juc/并发.md">并发常见问题</a>
 
+### 2.2.8 jvm常用命令
+  jps、jstack、jmap、jhat、jstat
+
 ## 2.3java.net
 ## 2.4javax.net.*
 ## 2.5java.nio.*

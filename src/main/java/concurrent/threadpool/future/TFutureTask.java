@@ -1,5 +1,7 @@
 package concurrent.threadpool.future;
 
+import org.junit.Test;
+
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.concurrent.Callable;
@@ -19,10 +21,10 @@ import java.util.concurrent.TimeUnit;
  * 2.单个任务获取结果的场景
  */
 public class TFutureTask {
-	
+
 	static ExecutorService pool = Executors.newFixedThreadPool(5);
-	
-	static class RunnableTaskItem  implements Runnable{
+
+	class RunnableTaskItem implements Runnable {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		@Override
 		public void run() {
@@ -33,8 +35,8 @@ public class TFutureTask {
 			}
 		}
 	}
-	
-	static class CallableTaskItem  implements Callable<String>{
+
+	class CallableTaskItem implements Callable<String> {
 		SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm:ss");
 		@Override
 		public String call() {
@@ -46,25 +48,25 @@ public class TFutureTask {
 			return null;
 		}
 	}
-	
-	public static void main(String[] args) throws InterruptedException, ExecutionException {
-		/**
-		 * 测试一
-		 * 1.成功完成时 get 返回给定的结果 。
-		 * 2.如果不需要特定的结果，则考虑使用下列形式的构造：
-		 * Future<?> f = new FutureTask<Object>(runnable, null) 
-		 */
-//		String result = "success";
-//		FutureTask<String> futureTask = new FutureTask<String>(new RunnableTaskItem(), result);
-//		pool.submit(futureTask);
-//		System.out.println(futureTask.get());
-		/**
-		 * 测试二
-		 */
-		FutureTask<String> futureTask = new FutureTask<String>(new CallableTaskItem());
+
+	/**
+	 * 1.成功完成时 get 返回给定的结果 。
+	 * 2.如果不需要特定的结果，则考虑使用下列形式的构造：
+	 * Future<?> f = new FutureTask<Object>(runnable, null)
+	 */
+	@Test
+	public void runable() throws ExecutionException, InterruptedException {
+		String result = "success";
+		FutureTask<String> futureTask = new FutureTask<>(new RunnableTaskItem(), result);
 		pool.submit(futureTask);
 		System.out.println(futureTask.get());
-		
+	}
+
+	@Test
+	public void callable() throws ExecutionException, InterruptedException {
+		FutureTask<String> futureTask = new FutureTask<>(new CallableTaskItem());
+		pool.submit(futureTask);
+		System.out.println(futureTask.get());
 		pool.shutdown();
 	}
 }

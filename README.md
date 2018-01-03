@@ -363,8 +363,8 @@
 
 ![](/document/juc/JUC_ThreadPool.png "线程池常用类关系")
 
-### 2.2.4.1ExecutorCompletionService
- * CompletionService实现了生产者提交任务和消费者获取结果的解耦，生产者和消费者都不用关心任务的完成顺序， 由 ExecutorCompletionService来保证，消费者一定是按照任务完成的先后顺序来获取执行结果。
+### 2.2.4.1Executor`CompletionService`
+ * CompletionService实现了生产者提交任务和消费者获取结果的解耦，消费者一定是按照任务完成的先后顺序来获取执行结果,注意不是提交顺序。（自定义的实现为按照提交顺序）
  * 基本实现：Executor+阻塞队列实现
  * 一组任务获取结果的场景
 

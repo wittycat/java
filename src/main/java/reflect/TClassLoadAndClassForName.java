@@ -12,8 +12,17 @@ import org.junit.Test;
  *         会初始化静态变量和静态代码块  ; loadClass不会
  */
 public class TClassLoadAndClassForName {
-	
-	
+
+	static class TestClass {
+		static {
+			System.out.println("static 块执行..");
+		}
+
+		public TestClass() {
+			System.out.println("构造函数  执行..");
+		}
+	}
+
 	@Test
 	public void  testClassLoad() throws ClassNotFoundException, Exception{
 		Class<?> loadClass = Thread.currentThread()
@@ -34,13 +43,6 @@ public class TClassLoadAndClassForName {
 		TestClass testClass = (TestClass) clazz.newInstance();
 	}
 
-}
-class TestClass{
-	static{
-		System.out.println("static 块执行..");
-	}
 
-	public TestClass() {
-		System.out.println("构造函数  执行..");
-	}
 }
+

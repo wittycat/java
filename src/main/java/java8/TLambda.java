@@ -27,4 +27,9 @@ public class TLambda {
         System.out.println("mian...");
         TimeUnit.SECONDS.sleep(1);
     }
+
+    @Test
+    public void test3() {
+
+    }
 }

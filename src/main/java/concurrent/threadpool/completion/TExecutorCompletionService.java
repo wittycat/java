@@ -64,10 +64,9 @@ public class TExecutorCompletionService {
 		runableExecutorCompletionService();
 	}
 
-	/******************************************
+	/*******************************************
 	 * Callable
 	 ************************************/
-
 	class CallableTaskItem implements Callable<String> {
 		private int j;
 
@@ -80,6 +79,10 @@ public class TExecutorCompletionService {
 			int i = new Random().nextInt(20);
 			TimeUnit.SECONDS.sleep(i);
 			return j + "->(" + i + ")" + new SimpleDateFormat("hh:mm:ss").format(new Date());
+			/**
+			 * 当程序由于异常 返回null 时 没有什么影响  只是 take().get() 也会返回null  不会影响正常流程
+			 */
+			//return null;
 		}
 	}
 

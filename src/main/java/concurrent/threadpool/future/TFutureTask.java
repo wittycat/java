@@ -43,6 +43,10 @@ public class TFutureTask {
 			try {
 				TimeUnit.SECONDS.sleep(5);
 				return "业务执行:" + dateFormat.format(new Date());
+				/**
+				 * 当程序由于异常 返回null 时 没有什么影响  只是get() 也会返回null  不会影响正常流程
+				 */
+				//return null;
 			} catch (Exception ignore) {
 			}
 			return null;

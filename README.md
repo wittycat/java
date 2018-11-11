@@ -122,20 +122,13 @@
 
 ##### io字节输入流（不是所有的输入输出都一一对应）
 
- ![io字节输入流](https://github.com/wittycat/java/blob/master/document/io/io_byte_inputStream.png)
-
+ ![io字节输入流](https://github.com/wittycat/java/blob/master/document/io/io_byte_inputStream.png?raw=true)
 ##### io字节输出流
-
- ![io字节输出流](https://github.com/wittycat/java/blob/master/document/io/io_byte_outputStream.png)
-
-
+ ![io字节输出流](https://github.com/wittycat/java/blob/master/document/io/io_byte_outputStream.png?raw=true)
 ##### io字符输入流
-
- ![io字符输出流](https://github.com/wittycat/java/blob/master/document/io/io_reader.png)
-
+ ![io字符输出流](https://github.com/wittycat/java/blob/master/document/io/io_reader.png?raw=true)
 ##### io字符输出流
-
- ![io字符输出流](https://github.com/wittycat/java/blob/master/document/io/io_writer.png)
+ ![io字符输出流](https://github.com/wittycat/java/blob/master/document/io/io_writer.png?raw=true)
 
 ## 1.3java.lang
     java的base包，唯一一个只使用不用导包的包。
@@ -157,7 +150,7 @@
 
 ## 2.1java.lang.reflect
 ### 2.1.1反射
-![反射类的主要关系](https://github.com/wittycat/java/blob/master/document/reflect/reflect_class.png)
+![反射类的主要关系](https://github.com/wittycat/java/blob/master/document/reflect/reflect_class.png?raw=true)
 
 - 获取对象字节对象的3种方式
   - this.getClass()
@@ -166,7 +159,7 @@
 - Class 对象可以获取字段数组，方法数组，构造函数（通过方法可以创建实例），所涉及的权限修饰符，参数，参数类型，方法的返回值类等一切基本都可以获取到。
 
 ### 2.1.2动态代理
-![动态代理执行逻辑](https://github.com/wittycat/java/blob/master/document/reflect/jdk_Proxy.png)
+![动态代理执行逻辑](https://github.com/wittycat/java/blob/master/document/reflect/jdk_Proxy.png?raw=true)
 
 - 代理模式的应用
 - 创建过程类似于“高级装饰者模式”+“高级继承（非继承实现类，继承的是接口）”
@@ -179,7 +172,7 @@
 
 	并发包主要内容：原子类，锁，容器，线程池，框架，工具类
 
-![并发主要内容](https://github.com/wittycat/java/blob/master/document/juc/JUC_main.png)
+![并发主要内容](https://github.com/wittycat/java/blob/master/document/juc/JUC_main.png?raw=true)
 
 ### 2.2.1原子类
 * 关于Unsafe的并发性。compareAndSwap*方法是原子的，并且可用来实现高性能的、无锁（free-lock）的数据结构。<br/>
@@ -212,7 +205,7 @@
 ### 2.2.2锁
 主要类关系：
 
-![Lock包主要类关系](https://github.com/wittycat/java/blob/master/document/juc/JUC_Lock_Main.png)
+![Lock包主要类关系](https://github.com/wittycat/java/blob/master/document/juc/JUC_Lock_Main.png?raw=true)
 
 #### 2.2.2.1AQS
 
@@ -249,7 +242,7 @@
 
 #### 2.2.2.2ReentrantLock
 
-![ReentrantLock内部关系](https://github.com/wittycat/java/blob/master/document/juc/JUC_ReentrantLock.png)
+![ReentrantLock内部关系](https://github.com/wittycat/java/blob/master/document/juc/JUC_ReentrantLock.png?raw=true)
 
 - 主要理解公平锁和非公平锁的在获取锁时的不同之处（**二者都使用同步队列，非公平锁再获取时存在插队现象，这样对于队列其他的节点线程就是不公平的**）
 - ReentrantLock,属于互斥锁，重入锁（**释放必须和获取执行次数一样**）
@@ -262,7 +255,7 @@
 
 #### 2.2.2.3ReentrantReadWriteLock
 
-![ReentrantReadWriteLock内部关系](https://github.com/wittycat/java/blob/master/document/juc/JUC_ReentrantReadWriteLock.png )
+![ReentrantReadWriteLock内部关系](https://github.com/wittycat/java/blob/master/document/juc/JUC_ReentrantReadWriteLock.png?raw=true)
 
 - 出现读写锁的缘由：当多读少写时，使用读写锁比使用互斥锁具有更高的并发性
 - 特点：（**读锁可以并发访问，写锁时其他的读锁和其他的写锁都被阻塞**）
@@ -275,7 +268,7 @@
 ### 2.2.3容器
 
   主要并发容器
-![并发容器](https://github.com/wittycat/java/blob/master/document/juc/JUC_Collection.png )
+![并发容器](https://github.com/wittycat/java/blob/master/document/juc/JUC_Collection.png?raw=true)
 
 ### 2.2.3.1队列
 
@@ -361,7 +354,7 @@
 ### 2.2.4线程池
  线程池常用类关系
 
-![线程池常用类关系](https://github.com/wittycat/java/blob/master/document/juc/JUC_ThreadPool.png )
+![线程池常用类关系](https://github.com/wittycat/java/blob/master/document/juc/JUC_ThreadPool.png?raw=true)
 
 ### 2.2.4.1Executor`CompletionService`
  * CompletionService实现了生产者提交任务和消费者获取结果的解耦，消费者一定是按照任务完成的先后顺序来获取执行结果,注意不是提交顺序。（自定义的实现为按照提交顺序）

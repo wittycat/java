@@ -1,9 +1,9 @@
 package concurrent.atomic;
 
+import sun.misc.Unsafe;
+
 import java.lang.reflect.Constructor;
 import java.util.concurrent.CountDownLatch;
-
-import sun.misc.Unsafe;
 
 /** 
  * @Author:chenxun
@@ -12,7 +12,7 @@ import sun.misc.Unsafe;
  * @Reference:
  * @Descript:
  */
-public class CAtomicInteger {
+public class TAtomicInteger {
 	
 	static Unsafe unsafe;
 	static long valueOffset;
@@ -30,7 +30,7 @@ public class CAtomicInteger {
 			Constructor<Unsafe> unsafeConstructor = Unsafe.class.getDeclaredConstructor();
 			unsafeConstructor.setAccessible(true);
 		    unsafe = unsafeConstructor.newInstance();
-		    valueOffset = unsafe.objectFieldOffset(CAtomicInteger.class.getDeclaredField("value"));
+		    valueOffset = unsafe.objectFieldOffset(TAtomicInteger.class.getDeclaredField("value"));
 		} catch (Exception e) {
 			 throw new Error(e);
 		}
@@ -51,7 +51,7 @@ public class CAtomicInteger {
 	}
 	
 	public static void main(String[] args) {
-		final CAtomicInteger cAtomicInteger = new CAtomicInteger();
+		final TAtomicInteger cAtomicInteger = new TAtomicInteger();
 		System.out.println("init value="+cAtomicInteger.getValue());
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		

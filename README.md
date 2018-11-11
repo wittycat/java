@@ -420,7 +420,7 @@
    * Semaphore可以应用于流量控制，比如对数据库的连接数控制
    
 ### 2.2.7常见问题（整理自并发编程网）
-<a href="./document/juc/并发.md">并发常见问题</a>
+[并发常见问题](href="https://github.com/wittycat/java/blob/master/document/juc/%E5%B9%B6%E5%8F%91.md)
 
 ### 2.2.8 jvm常用命令
   jps、jstack、jmap、jhat、jstat

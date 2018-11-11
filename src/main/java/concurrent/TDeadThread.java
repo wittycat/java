@@ -21,6 +21,7 @@ public class TDeadThread {
 	static String lock2 = "lock2";
 	
 	static Runnable thread1 =  new Runnable() {
+		@Override
 		public void run() {
 			synchronized (lock1) {
 				synchronized (lock2) {

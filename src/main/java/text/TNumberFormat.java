@@ -1,8 +1,8 @@
 package text;
 
-import java.text.NumberFormat;
-
 import org.junit.Test;
+
+import java.text.NumberFormat;
 
 /** 
  * @author：chenxun
@@ -19,7 +19,5 @@ public class TNumberFormat {
 	   
 	   System.out.println(value);//￥100.00
 	   System.out.println(percent);//20%
-	   
-
    }
 }

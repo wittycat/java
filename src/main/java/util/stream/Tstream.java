@@ -95,4 +95,15 @@ public class Tstream {
         list.sort(Comparator.comparingInt(Employee::getAge).reversed().thenComparingDouble(Employee::getSalary));
         list.forEach(System.out::println);
     }
+
+
+    @Test
+    public void comparing2() {
+        System.out.println(Integer.toBinaryString(Integer.MAX_VALUE));
+        System.out.println(Integer.toBinaryString(Integer.MAX_VALUE+1));
+        System.out.println(Integer.MAX_VALUE);
+        System.out.println(Integer.toBinaryString(Integer.MIN_VALUE));
+        System.out.println(Integer.toBinaryString(Integer.MIN_VALUE+1));
+        System.out.println(Integer.MIN_VALUE);
+    }
 }

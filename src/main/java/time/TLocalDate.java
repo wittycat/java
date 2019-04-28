@@ -82,7 +82,7 @@ public class TLocalDate {
         DateTimeFormatter dateTimeFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
         //当天零点
         System.out.println( dateTimeFormatter.format(LocalDateTime.of(LocalDate.now(), LocalTime.MIN)));
-        // 毫秒值
+        // 毫秒值  使用的时区都是东8区，也就是北京时间
         System.out.println( LocalDateTime.of(LocalDate.now(), LocalTime.MIN).toInstant(ZoneOffset.of("+8")).toEpochMilli());
         //当天 23:59:59
         System.out.println( dateTimeFormatter.format(LocalDateTime.of(LocalDate.now(), LocalTime.MAX)));

@@ -105,9 +105,6 @@ public class ReflectUtils {
 		
 		/**
 		 * 字段描述
-		 * @param modifier
-		 * @param type
-		 * @param name
 		 */
 		private String FieldDescription(Field[] fields) {
 			StringBuilder builder = new StringBuilder();

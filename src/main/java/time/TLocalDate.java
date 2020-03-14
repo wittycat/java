@@ -2,6 +2,7 @@ package time;
 
 import org.junit.Test;
 
+import java.io.IOException;
 import java.time.*;
 import java.time.format.DateTimeFormatter;
 import java.util.concurrent.TimeUnit;
@@ -98,5 +99,13 @@ public class TLocalDate {
     public  void method5()  {
         Instant instant = Instant.ofEpochMilli(System.currentTimeMillis());
         System.out.println(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss").format(LocalDateTime.ofInstant(instant, ZoneId.systemDefault())));
+    }
+
+
+    @Test
+    public  void method6() throws IOException {
+        DateTimeFormatter formatter = DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss");
+        LocalDateTime localDateTime = LocalDateTime.parse("2019-07-06 00:00:00", formatter);
+        System.out.println(localDateTime.toInstant(ZoneOffset.ofHours(8)).toEpochMilli());
     }
 }

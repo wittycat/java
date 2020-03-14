@@ -106,4 +106,30 @@ public class TRegex {
         boolean isMatch = Pattern.matches(pattern, content);
         System.out.println(isMatch);
     }
+
+    @Test
+    public  void method6() {
+        String content = "SO_20190614115325.xls";
+        String pattern = "^SO_\\d{14}.xls";
+        boolean isMatch = Pattern.matches(pattern, content);
+        System.out.println(isMatch);
+    }
+
+    @Test
+    public  void method7() {
+        String content2 = "拨款明细表-308010700992381_20190521.csv";
+        String pattern2 = "^拨款明细表-\\d{15}_\\d{8}.csv";
+        boolean isMatch2 = Pattern.matches(pattern2, content2);
+        System.out.println(isMatch2);
+    }
+
+    @Test
+    public  void method8() {
+        String content2 = "308010,7009,92381";
+        String pattern2 = "^\\d(\\d|\\,)*\\d$";
+        boolean isMatch2 = Pattern.matches(pattern2, content2);
+        System.out.println(isMatch2);
+    }
+
+
 }

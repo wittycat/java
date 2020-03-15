@@ -1,9 +1,8 @@
 package concurrent;
 
-import java.lang.reflect.Field;
-import java.util.concurrent.TimeUnit;
-
 import sun.misc.Unsafe;
+
+import java.lang.reflect.Field;
 
 /**
  * @Author:chenxun
@@ -44,13 +43,8 @@ public  class TUnsafe {
 
 		@Override
 		public void run() {
-			try {
-				TimeUnit.SECONDS.sleep(3);
-				System.out.format("异步线程加1%n");
-				tUnsafe.setA(tUnsafe.getA()+1);
-			} catch (InterruptedException e) {
-				e.printStackTrace();
-			}
+			System.out.format("异步线程加1%n");
+			tUnsafe.setA(tUnsafe.getA() + 1);
 		}
 	}
 
@@ -59,11 +53,12 @@ public  class TUnsafe {
 		/**
 		 * 由于java本身处于安全问题 不能直接访问  必须修改访问权限
 		 * Exception in thread "main" java.lang.SecurityException: Unsafe
+         *
+         * Unsafe unsafe = Unsafe.getUnsafe();
+         * 返回4或8,代表是32位还是64位操作系统。
+         * System.out.println(unsafe.addressSize());
 		 */
-		// Unsafe unsafe = Unsafe.getUnsafe();
-		// 返回4或8,代表是32位还是64位操作系统。  
-		// System.out.println(unsafe.addressSize());
-		
+
 		try {
 			
 			//获取字段 修改访问权限
@@ -71,7 +66,7 @@ public  class TUnsafe {
 			f.setAccessible(true);
 			//获得实例
 			Unsafe unsafe = (Unsafe) f.get(null);
-			//System.out.println(unsafe.addressSize());
+			System.out.format("addressSize=%s",unsafe.addressSize());
 
 			TUnsafe bean = new TUnsafe();
 			Field declaredField = bean.getClass().getDeclaredField("a");
@@ -89,17 +84,14 @@ public  class TUnsafe {
 			while (true) {
 				 count++;
 				 boolean r = unsafe.compareAndSwapInt(bean, objectFieldOffset, 1, 5);
-				 if(r)
+				 if(r){
 					 break;
-				 
+				 }
+
 			};
 			System.out.format("自旋次数count=%d,a=%d%n", count,bean.getA());
 			
-		} catch (NoSuchFieldException | SecurityException e) {
-			e.printStackTrace();
-		} catch (IllegalArgumentException e) {
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
+		} catch (Exception e) {
 			e.printStackTrace();
 		}
 	}

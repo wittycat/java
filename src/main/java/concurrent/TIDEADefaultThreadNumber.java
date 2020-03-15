@@ -24,9 +24,9 @@ public class TIDEADefaultThreadNumber {
          * </code>
          */
         ThreadGroup threadGroup = Thread.currentThread().getThreadGroup();
-        Thread[] threads = new Thread[Thread.activeCount()];
-        int enumerate = threadGroup.enumerate(threads);
-        for (Thread t : threads) {
+        Thread[] containerThreads = new Thread[Thread.activeCount()];
+        threadGroup.enumerate(containerThreads);
+        for (Thread t : containerThreads) {
             System.out.println(t.getName());
         }
 

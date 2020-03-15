@@ -23,20 +23,18 @@ public class TJionYield {
 //	  thread.join();
 //	  System.out.println("main线程");
 	  
-	  Thread thread = new Thread(new Runnable() {
-		  @Override
-		  public void run() {
-			  try {
-				  Thread.sleep(3000);
-				  System.out.println(Thread.currentThread().toString());
-			  } catch (InterruptedException e) {
-				  e.printStackTrace();
-			  }
+	  Thread thread = new Thread(() -> {
+		  try {
+			  Thread.sleep(3000);
+			  System.out.println(Thread.currentThread().toString());
+		  } catch (InterruptedException e) {
+			  e.printStackTrace();
 		  }
 	  });
 	  thread.start();
-	  while (Thread.activeCount()>1)
+	  while (Thread.activeCount()>2){
 		  Thread.yield();
+	  }
 	  System.out.println("main线程");
    }
 }

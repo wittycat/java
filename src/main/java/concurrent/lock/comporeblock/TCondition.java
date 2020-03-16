@@ -39,10 +39,11 @@ public class TCondition {
 			super(name);
 		}
 
+		@Override
 		public void run() {
 			try {
 				reentrantLock.lock();
-				System.out.println(Thread.currentThread().getName()+ " wakup others");
+				System.out.println(Thread.currentThread().getName()+ " wakeup others");
 				condition.signal();
 			}finally{
 				reentrantLock.unlock();

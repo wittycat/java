@@ -22,9 +22,10 @@ public class TCustomSyncShareLock implements Lock {
 	 * @param limit 当前共享锁最大支持几个线程访问
 	 */
 	public TCustomSyncShareLock(int limit) {
-		if(limit<1)
+		if (limit < 1) {
 			throw new IllegalArgumentException(" limit must over zero");
-		this.sync =  new Sync(limit);
+		}
+		this.sync = new Sync(limit);
 	}
 	
 	@SuppressWarnings("serial")
@@ -32,7 +33,8 @@ public class TCustomSyncShareLock implements Lock {
 		public Sync(int limit){
 			super.setState(limit);
 		};
-		
+
+		@Override
 		public int tryAcquireShared(int reduceCount) {
 
 			for (;;) {
@@ -44,6 +46,7 @@ public class TCustomSyncShareLock implements Lock {
 			}
 		}
 
+		@Override
 		public boolean tryReleaseShared(int returnCount) {
 
 			for (;;) {

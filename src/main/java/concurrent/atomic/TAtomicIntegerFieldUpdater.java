@@ -48,15 +48,12 @@ public class TAtomicIntegerFieldUpdater {
 		final IntegerBean integerBean = new IntegerBean(0);
 
 		for (int i = 0; i < 1000; i++) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						countDownLatch.await();
-						updater.getAndAdd(integerBean, 2);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+			new Thread(() -> {
+				try {
+					countDownLatch.await();
+					updater.getAndAdd(integerBean, 2);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}).start();
 		}

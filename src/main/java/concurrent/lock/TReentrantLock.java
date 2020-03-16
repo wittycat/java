@@ -21,27 +21,25 @@ public class TReentrantLock {
 		final ReentrantLock lock  = new ReentrantLock(true);
 		final Condition condition = lock.newCondition();
 		for (int i = 0; i < 10; i++) {
-			Thread thread = new Thread(new Runnable() {
-				@Override
-				public void run() {
-					lock.lock();
-					System.out.format("%s 获取锁,处于等待 %n", Thread.currentThread().getName());
-					try {
-						condition.await();
-						System.out.format("%s 获取锁, 被唤醒  %n", Thread.currentThread().getName());
-					} catch (InterruptedException e) {
-					}finally{
-						lock.unlock();
-					}
+			Thread thread = new Thread(() -> {
+				lock.lock();
+				System.out.format("%s 获取锁,处于等待 %n", Thread.currentThread().getName());
+				try {
+					condition.await();
+					System.out.format("%s 获取锁, 被唤醒  %n", Thread.currentThread().getName());
+				} catch (InterruptedException e) {
+				}finally{
+					lock.unlock();
 				}
 			});
 			thread.setName("thread-"+i);
 			thread.start();
 		}
 		//保证所有线程都启动,但不能保证所有线程已经获取过锁
-		while(Thread.activeCount()<11)
+		while(Thread.activeCount()<12){
 			Thread.yield();
-		
+		}
+
 		{
 			System.out.format("返回正等待获取此锁的线程估计数:%d %n", lock.getQueueLength());
 			System.out.format("查询给定线程是否正在等待获取此锁:%b %n", lock.hasQueuedThread(Thread.currentThread()));
@@ -56,7 +54,7 @@ public class TReentrantLock {
 	     */
 		{
 			int i = 0 ;
-			while(Thread.activeCount()>1){
+			while(Thread.activeCount()>2){
 				lock.lock();
 				System.out.format("查询是否有些线程正在等待与此锁有关的给定条件:%s %n", lock.hasWaiters(condition));
 				condition.signalAll();

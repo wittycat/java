@@ -14,7 +14,7 @@ import java.util.concurrent.Exchanger;
  */
 public class TExchanger {
 	public static void main(String[] args) {
-		final Exchanger<Integer> exchanger = new Exchanger<Integer>();
+		final Exchanger<Integer> exchanger = new Exchanger<>();
 		new Thread(new Runnable() {
 			@Override
 			public void run() {

@@ -16,8 +16,14 @@ import java.util.concurrent.locks.Lock;
  * 			锁有独享锁，共享锁。
  */
 public class TCustomSyncExclusiveLock implements Lock {
-	
-	private final class SyncLock  extends AbstractQueuedSynchronizer{
+
+	private SyncExclusive syncLock;
+
+	public TCustomSyncExclusiveLock() {
+		this.syncLock =  new SyncExclusive();
+	}
+
+	private final class SyncExclusive  extends AbstractQueuedSynchronizer{
 
 		private static final long serialVersionUID = 7780381425422372965L;
 		
@@ -51,7 +57,6 @@ public class TCustomSyncExclusiveLock implements Lock {
 			return new ConditionObject();
 		}
 	}
-    private SyncLock syncLock = new SyncLock();
     
 	@Override
 	public void lock() {
@@ -97,21 +102,18 @@ public class TCustomSyncExclusiveLock implements Lock {
 		final TCustomSyncExclusiveLock lock = new TCustomSyncExclusiveLock();
 		final int[] ints = {0};
 		for (int i = 0; i < 10000; i++) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						lock.lock();
-						System.out.format("等待队列的大写:%d%n",lock.getWaitQueuedSzie());
-						ints[0] = ints[0]+1;
-					}finally{
-						lock.unlock();
-					}
+			new Thread(() -> {
+				try {
+					lock.lock();
+					System.out.format("等待队列的大写:%d%n",lock.getWaitQueuedSzie());
+					ints[0] = ints[0]+1;
+				}finally{
+					lock.unlock();
 				}
 			}).start();
 		}
 		
-		while (Thread.activeCount()>1) {
+		while (Thread.activeCount()>2) {
 			Thread.yield();
 		}
 		System.out.println(ints[0]);

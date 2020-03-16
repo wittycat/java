@@ -33,14 +33,16 @@ public class TReentrantLock3 {
 			super(fair);
 		}
 
+		@Override
 		public Collection<Thread> getQueuedThreads() {
-			ArrayList<Thread> list = new ArrayList<Thread>(super.getQueuedThreads());
+			ArrayList<Thread> list = new ArrayList<>(super.getQueuedThreads());
 			java.util.Collections.reverse(list);
 			return list;
 		}
-		
+
+		@Override
 		public Collection<Thread> getWaitingThreads(Condition condition) {
-			ArrayList<Thread> list = new ArrayList<Thread>(super.getWaitingThreads(condition));
+			ArrayList<Thread> list = new ArrayList<>(super.getWaitingThreads(condition));
 			java.util.Collections.reverse(list);
 			return list;
 		}

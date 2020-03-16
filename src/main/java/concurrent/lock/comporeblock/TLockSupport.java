@@ -35,8 +35,9 @@ public class TLockSupport {
 			super(name);
 		}
 
+		@Override
 		public void run() {
-			System.out.println(Thread.currentThread().getName()+ " wakup others");
+			System.out.println(Thread.currentThread().getName()+ " wakeup others");
 			// 唤醒“主线程”
 			LockSupport.unpark(mainThread);
 		}

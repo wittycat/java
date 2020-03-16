@@ -18,25 +18,26 @@ import java.util.concurrent.locks.Lock;
  */
 public class TCustomSyncShareLock implements Lock {
 	
-	private Sync sync;
+	private SyncShare sync;
 	/**
 	 * 
 	 * @param limit 当前共享锁最大支持几个线程访问
 	 */
 	public TCustomSyncShareLock(int limit) {
-		if(limit<1)
+		if(limit<1){
 			throw new IllegalArgumentException(" limit must over zero");
-		this.sync =  new Sync(limit);
+		}
+		this.sync =  new SyncShare(limit);
 	}
 	
 	@SuppressWarnings("serial")
-	private  final class  Sync extends AbstractQueuedSynchronizer{
-		public Sync(int limit){
+	private  final class  SyncShare extends AbstractQueuedSynchronizer{
+		public SyncShare(int limit){
 			super.setState(limit);
 		};
-		
-		public int tryAcquireShared(int reduceCount) {
 
+		@Override
+		public int tryAcquireShared(int reduceCount) {
 			for (;;) {
 				int current = getState();
 				int newCount = current - reduceCount;
@@ -46,8 +47,8 @@ public class TCustomSyncShareLock implements Lock {
 			}
 		}
 
+		@Override
 		public boolean tryReleaseShared(int returnCount) {
-
 			for (;;) {
 				int current = getState();
 				int newCount = current + returnCount;
@@ -56,6 +57,15 @@ public class TCustomSyncShareLock implements Lock {
 				}
 			}
 		}
+
+		Condition newCondition(){
+			return new ConditionObject();
+		}
+
+
+		public int getTState(){
+			return super.getState();
+		};
 	}
 	
 	@Override
@@ -84,45 +94,27 @@ public class TCustomSyncShareLock implements Lock {
 	
 	@Override
 	public Condition newCondition() {
-		// TODO Auto-generated method stub
-		return null;
+		return sync.newCondition();
 	}
    
 	public static void main(String[] args) throws InterruptedException {
 		final TCustomSyncShareLock lock = new TCustomSyncShareLock(3);
 		ExecutorService newFixedThreadPool = Executors.newFixedThreadPool(11);
 		for (int i = 0; i < 10; i++) {
-			Runnable runnable = new Runnable() {
-				@Override
-				public void run() {
-						lock.lock();
-						System.out.format("%s====%n",Thread.currentThread().getName());
-						try {
-							Thread.sleep(2000);
-						} catch (InterruptedException e) {
-						}finally{
-						lock.unlock();
-						}
+			int finalI = i;
+			Runnable runnable = () -> {
+				try {
+					lock.lock();
+					System.out.format("%s====%d%n", Thread.currentThread().getName(),lock.sync.getTState());
+					Thread.sleep(1000* finalI);
+				} catch (InterruptedException e) {
+				} finally {
+					lock.unlock();
 				}
 			};
 			newFixedThreadPool.submit(runnable);
 		}
-		Runnable runnable = new Runnable() {
-			@Override
-			public void run() {
-				while (true) {
-					try {
-						Thread.sleep(2000);
-						System.out.format("%n");
-					} catch (InterruptedException e) {
-					}
-				}
-			}
-		};
-		newFixedThreadPool.execute(runnable);
-		
-		
-		
+
 		Thread.sleep(12000);
 		System.exit(0);
 	}

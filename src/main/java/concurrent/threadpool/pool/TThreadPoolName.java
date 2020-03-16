@@ -15,7 +15,7 @@ public class TThreadPoolName {
             final int t = i;
             threadPoolExecutor.submit(() -> {
                 try {
-                    TimeUnit.SECONDS.sleep(t * 50);
+                    TimeUnit.SECONDS.sleep(t * 1);
                     System.out.println("threadName=" + Thread.currentThread().getName());
                 } catch (InterruptedException e) {
                 }

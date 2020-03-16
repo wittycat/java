@@ -1,9 +1,9 @@
 package concurrent.lock;
 
+import collection.ComporeTime;
+
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.locks.LockSupport;
-
-import collection.ComporeTime;
 
 /** 
  * @Author:chenxun
@@ -26,11 +26,11 @@ public class TLockSupport {
 					Long start = ComporeTime.start();
 					//一组 
 //					LockSupport.parkNanos(TimeUnit.SECONDS.toNanos(6));
-//					LockSupport.parkNanos(this,TimeUnit.SECONDS.toNanos(4));
+					LockSupport.parkNanos(this, TimeUnit.SECONDS.toNanos(4));
 					
 					//一组 TODO???
 //					LockSupport.parkUntil(TimeUnit.SECONDS.toNanos(2));
-					LockSupport.parkUntil(this,TimeUnit.SECONDS.toNanos(2));
+//					LockSupport.parkUntil(this,TimeUnit.SECONDS.toNanos(3));
 					
 					ComporeTime.getOutMinus(start);
 					
@@ -40,7 +40,7 @@ public class TLockSupport {
 		   });
     	   thread.start();
     	   
-    	   Thread.sleep(5000L);
+    	   Thread.sleep(1000L);
     	   
 //    	   System.out.println(Thread.activeCount());
     	   System.out.format("thread:%s%n",thread.toString());

@@ -10,17 +10,19 @@ import java.util.concurrent.CountDownLatch;
  */
 public class TCountDownLatch {
    public static void main(String[] args) {
-	   final CountDownLatch countDownLatch = new CountDownLatch(1);
-	   
-	   new Thread(() -> {
-		   System.out.format("指令线程 %s%n", Thread.currentThread().getName());
-		   try {
-			   Thread.sleep(3000L);
-		   } catch (InterruptedException e) {
-			   e.printStackTrace();
-		   }
-		   countDownLatch.countDown();
-	   }).start();
+	   final CountDownLatch countDownLatch = new CountDownLatch(5);
+	   for (int i = 0; i < 5; i++) {
+		   int finalI = i;
+		   new Thread(() -> {
+			   System.out.format("指令线程 %s%n", Thread.currentThread().getName());
+			   try {
+
+				   Thread.sleep(100L* finalI);
+			   } catch (InterruptedException e) {
+			   }
+			   countDownLatch.countDown();
+		   }).start();
+	   }
 	   
 	   for (int i = 0; i < 10; i++) {
 		   new Thread(() -> {

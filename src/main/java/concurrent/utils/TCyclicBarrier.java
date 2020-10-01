@@ -15,6 +15,7 @@ import java.util.concurrent.Executors;
  * @description：
  * 1.内部维护一个count 当count为0时，等待的线程开始运行，
  * 恢复CyclicBarrier的count为原初始值parties
+ * 基于AQS独占锁实现
  */
 public class TCyclicBarrier {
 

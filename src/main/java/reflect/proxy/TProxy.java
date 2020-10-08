@@ -1,14 +1,14 @@
 package reflect.proxy;
 
+import reflect.DemoBean;
+import reflect.IDemoBean;
+
 import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.lang.reflect.InvocationHandler;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Proxy;
-
-import reflect.DemoBean;
-import reflect.IDemoBean;
 
 /** 
  * @author:chenxun
@@ -24,7 +24,6 @@ public class TProxy {
 	   IDemoBean newProxyInstance = (IDemoBean)Proxy.newProxyInstance(IDemoBean.class.getClassLoader(), new Class[]{IDemoBean.class}, h);
 	   System.out.println(demoBean==newProxyInstance);
 	   System.out.println(newProxyInstance.getClass().getName());   
-	   
 	   newProxyInstance.setField("field赋值");
 	   
 	   

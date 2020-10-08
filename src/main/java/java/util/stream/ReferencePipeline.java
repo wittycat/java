@@ -187,12 +187,13 @@ abstract class ReferencePipeline<P_IN, P_OUT>
                                      StreamOpFlag.NOT_SORTED | StreamOpFlag.NOT_DISTINCT) {
             @Override
             Sink<P_OUT> opWrapSink(int flags, Sink<R> sink) {
-                return new Sink.ChainedReference<P_OUT, R>(sink) {
+                Sink.ChainedReference<P_OUT, R> chainedReference = new Sink.ChainedReference<P_OUT, R>(sink) {
                     @Override
                     public void accept(P_OUT u) {
                         downstream.accept(mapper.apply(u));
                     }
                 };
+                return chainedReference;
             }
         };
     }
@@ -221,12 +222,14 @@ abstract class ReferencePipeline<P_IN, P_OUT>
                                       StreamOpFlag.NOT_SORTED | StreamOpFlag.NOT_DISTINCT) {
             @Override
             Sink<P_OUT> opWrapSink(int flags, Sink<Long> sink) {
-                return new Sink.ChainedReference<P_OUT, Long>(sink) {
+                Sink.ChainedReference<P_OUT, Long> chainedReference = new Sink.ChainedReference<P_OUT, Long>(sink) {
                     @Override
                     public void accept(P_OUT u) {
                         downstream.accept(mapper.applyAsLong(u));
                     }
                 };
+
+                return chainedReference;
             }
         };
     }

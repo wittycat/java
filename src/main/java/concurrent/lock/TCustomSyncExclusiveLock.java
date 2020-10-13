@@ -116,7 +116,6 @@ public class TCustomSyncExclusiveLock implements Lock {
 		while (Thread.activeCount()>2) {
 			Thread.yield();
 		}
-		System.out.println(ints[0]);
+		System.out.println("期望值1000，"+ints[0]);
 	}
-
 }

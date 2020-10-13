@@ -47,37 +47,33 @@ public class TAtomicInteger {
 	}
 	
 	public final int getAndIncrement(int n) {
-	    return unsafe.getAndAddInt(this, valueOffset,n)+n;
+	    return unsafe.getAndAddInt(this, valueOffset,n);
 	}
-	
-	public static void main(String[] args) {
+
+	public static void main(String[] args) throws InterruptedException {
 		final TAtomicInteger cAtomicInteger = new TAtomicInteger();
 		System.out.println("init value="+cAtomicInteger.getValue());
 		final CountDownLatch countDownLatch = new CountDownLatch(1);
 		
 		for (int i = 0; i < 100; i++) {
-			new Thread(new Runnable() {
-				@Override
-				public void run() {
-					try {
-						countDownLatch.await();
-						cAtomicInteger.getAndIncrement(2);
-					} catch (InterruptedException e) {
-						e.printStackTrace();
-					}
+			new Thread(() -> {
+				try {
+					countDownLatch.await();
+					cAtomicInteger.getAndIncrement(1);
+				} catch (InterruptedException e) {
+					e.printStackTrace();
 				}
 			}).start();
 		}
 		
 		while (Thread.activeCount()!=102)
 			Thread.yield();
-		
 		countDownLatch.countDown();
+
+		//main,Monitor Ctrl-Break
 		while (Thread.activeCount()>2)
 			Thread.yield();
-		
-		System.out.println("期望200 value="+cAtomicInteger.getValue());
-		
+
+		System.out.println("期望100 value="+cAtomicInteger.getValue());
 	}
-	
 }
